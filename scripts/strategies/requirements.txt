@@ -1,0 +1,23 @@
+# strategies 项目依赖
+# AKQuant 文档: https://akquant.akfamily.xyz
+
+# 量化回测框架
+akquant>=0.2.23
+
+# 数据源
+akshare>=1.18.60
+tickflow>=0.1.21
+
+# 数据处理
+pandas>=2.0.0
+numpy>=1.24.0
+polars>=0.20.0
+pyarrow>=14.0.0
+
+# 机器学习
+lightgbm>=4.0.0
+scikit-learn>=1.3.0
+
+# 可视化
+matplotlib>=3.7.0
+plotly>=5.0.0

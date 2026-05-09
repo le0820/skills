@@ -32,3 +32,17 @@ env/
 *.swp
 *.swo
 *~
+
+# OpenClaw 个人配置（不推送到公开研究仓库）
+AGENTS.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TODO.md
+TOOLS.md
+USER.md
+memory/
+.clawhub/
+.openclaw/
+scripts/writing/seedance/
+skills/mineru-ai/
