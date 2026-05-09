@@ -1,0 +1,384 @@
+{
+  "timestamp": "2026-05-09",
+  "individual": {
+    "513130.SH": {
+      "name": "恒生科技ETF",
+      "n_days": 499,
+      "ann_volatility": 30.25,
+      "sharpe_ratio": 0.55,
+      "var": {
+        "daily_95pct": -2.87,
+        "daily_99pct": -3.84,
+        "cvar_95pct": -3.58,
+        "full_period_var_95": -2.74,
+        "full_period_var_99": -3.73,
+        "full_period_cvar_95": -3.79,
+        "trend_20d_vs_40d_pct": -7.8,
+        "trend_direction": "缩小✅"
+      },
+      "drawdown": {
+        "max_dd_pct": -32.7,
+        "dd_60d_pct": -32.7,
+        "recovery_days": 21,
+        "in_drawdown_now": true
+      },
+      "momentum": {
+        "ret_1m": 8.86,
+        "ret_3m": -14.93,
+        "ret_6m": -22.64,
+        "ret_12m": -6.85,
+        "momentum_12_1": -15.7
+      },
+      "ff5_loadings": {
+        "alpha_monthly": -0.004368,
+        "alpha_annual": -0.051176,
+        "beta_mkt": 0.9424,
+        "beta_smb": -1.1837,
+        "beta_hml": 0.645,
+        "beta_rmw": 0.7175,
+        "beta_cma": -0.152,
+        "t_alpha": -0.18,
+        "t_mkt": 1.16,
+        "t_smb": -1.2,
+        "t_hml": 0.55,
+        "t_rmw": 0.65,
+        "t_cma": -0.13,
+        "r2": 0.1206,
+        "n_months": 24,
+        "interpretation": []
+      }
+    },
+    "513310.SH": {
+      "name": "中韩半导体ETF",
+      "n_days": 499,
+      "ann_volatility": 39.27,
+      "sharpe_ratio": 1.78,
+      "var": {
+        "daily_95pct": -6.12,
+        "daily_99pct": -9.16,
+        "cvar_95pct": -8.95,
+        "full_period_var_95": -3.35,
+        "full_period_var_99": -6.88,
+        "full_period_cvar_95": -5.36,
+        "trend_20d_vs_40d_pct": -22.9,
+        "trend_direction": "缩小✅"
+      },
+      "drawdown": {
+        "max_dd_pct": -23.46,
+        "dd_60d_pct": -23.39,
+        "recovery_days": 7,
+        "in_drawdown_now": false
+      },
+      "momentum": {
+        "ret_1m": 49.35,
+        "ret_3m": 51.41,
+        "ret_6m": 75.02,
+        "ret_12m": 215.55,
+        "momentum_12_1": 166.21
+      },
+      "ff5_loadings": {
+        "alpha_monthly": 0.028172,
+        "alpha_annual": 0.395686,
+        "beta_mkt": 1.3329,
+        "beta_smb": -0.3154,
+        "beta_hml": 0.3494,
+        "beta_rmw": -0.7092,
+        "beta_cma": 1.2222,
+        "t_alpha": 0.93,
+        "t_mkt": 1.3,
+        "t_smb": -0.25,
+        "t_hml": 0.23,
+        "t_rmw": -0.51,
+        "t_cma": 0.82,
+        "r2": 0.1488,
+        "n_months": 24,
+        "interpretation": []
+      }
+    },
+    "159682.SZ": {
+      "name": "创业板50ETF",
+      "n_days": 499,
+      "ann_volatility": 38.19,
+      "sharpe_ratio": 1.18,
+      "var": {
+        "daily_95pct": -2.36,
+        "daily_99pct": -2.92,
+        "cvar_95pct": -2.79,
+        "full_period_var_95": -2.58,
+        "full_period_var_99": -4.1,
+        "full_period_cvar_95": -4.54,
+        "trend_20d_vs_40d_pct": -9.1,
+        "trend_direction": "缩小✅"
+      },
+      "drawdown": {
+        "max_dd_pct": -38.71,
+        "dd_60d_pct": -7.68,
+        "recovery_days": 99,
+        "in_drawdown_now": false
+      },
+      "momentum": {
+        "ret_1m": 21.96,
+        "ret_3m": 15.52,
+        "ret_6m": 12.59,
+        "ret_12m": 107.49,
+        "momentum_12_1": 85.54
+      },
+      "ff5_loadings": {
+        "alpha_monthly": 0.031688,
+        "alpha_annual": 0.454048,
+        "beta_mkt": 0.3578,
+        "beta_smb": 0.917,
+        "beta_hml": -0.916,
+        "beta_rmw": -0.3272,
+        "beta_cma": 1.3878,
+        "t_alpha": 1.04,
+        "t_mkt": 0.35,
+        "t_smb": 0.73,
+        "t_hml": -0.61,
+        "t_rmw": -0.23,
+        "t_cma": 0.92,
+        "r2": 0.1076,
+        "n_months": 24,
+        "interpretation": []
+      }
+    },
+    "QQQ.US": {
+      "name": "纳斯达克100ETF",
+      "n_days": 499,
+      "ann_volatility": 21.19,
+      "sharpe_ratio": 1.16,
+      "var": {
+        "daily_95pct": -1.87,
+        "daily_99pct": -2.2,
+        "cvar_95pct": -2.15,
+        "full_period_var_95": -2.15,
+        "full_period_var_99": -3.65,
+        "full_period_cvar_95": -3.15,
+        "trend_20d_vs_40d_pct": -0.8,
+        "trend_direction": "持平"
+      },
+      "drawdown": {
+        "max_dd_pct": -23.38,
+        "dd_60d_pct": -12.61,
+        "recovery_days": 56,
+        "in_drawdown_now": false
+      },
+      "momentum": {
+        "ret_1m": 16.36,
+        "ret_3m": 16.8,
+        "ret_6m": 15.47,
+        "ret_12m": 44.17,
+        "momentum_12_1": 27.8
+      },
+      "ff5_loadings": {
+        "alpha_monthly": 3e-06,
+        "alpha_annual": 3.3e-05,
+        "beta_mkt": 0.9583,
+        "beta_smb": -0.1627,
+        "beta_hml": -0.3994,
+        "beta_rmw": -0.2294,
+        "beta_cma": 0.2199,
+        "t_alpha": 0.0,
+        "t_mkt": 8.8,
+        "t_smb": -1.31,
+        "t_hml": -2.64,
+        "t_rmw": -1.67,
+        "t_cma": 1.49,
+        "r2": 0.9219,
+        "n_months": 23,
+        "interpretation": [
+          "市场β=0.96(防御型)",
+          "成长偏好(HML=-0.40)"
+        ]
+      }
+    }
+  },
+  "portfolio": {
+    "var_95_1d_pct": -2.47,
+    "var_99_1d_pct": -3.73,
+    "cvar_95_1d_pct": -3.66,
+    "correlation_matrix": {
+      "513130.SH": {
+        "513130.SH": 1.0,
+        "513310.SH": 0.53,
+        "159682.SZ": 0.65,
+        "QQQ.US": 0.15
+      },
+      "513310.SH": {
+        "513130.SH": 0.53,
+        "513310.SH": 1.0,
+        "159682.SZ": 0.6,
+        "QQQ.US": 0.16
+      },
+      "159682.SZ": {
+        "513130.SH": 0.65,
+        "513310.SH": 0.6,
+        "159682.SZ": 1.0,
+        "QQQ.US": 0.1
+      },
+      "QQQ.US": {
+        "513130.SH": 0.15,
+        "513310.SH": 0.16,
+        "159682.SZ": 0.1,
+        "QQQ.US": 1.0
+      }
+    }
+  },
+  "l2_scores": {
+    "513130.SH": {
+      "name": "恒生科技ETF",
+      "mkt": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 0.9424
+      },
+      "smb": {
+        "score": 3,
+        "label": "不显著",
+        "beta": -1.1837
+      },
+      "hml": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 0.645
+      },
+      "rmw": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 0.7175
+      },
+      "cma": {
+        "score": 3,
+        "label": "不显著",
+        "beta": -0.152
+      },
+      "avg_style_score": 3.0,
+      "r2": 0.1206
+    },
+    "513310.SH": {
+      "name": "中韩半导体ETF",
+      "mkt": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 1.3329
+      },
+      "smb": {
+        "score": 3,
+        "label": "不显著",
+        "beta": -0.3154
+      },
+      "hml": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 0.3494
+      },
+      "rmw": {
+        "score": 3,
+        "label": "不显著",
+        "beta": -0.7092
+      },
+      "cma": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 1.2222
+      },
+      "avg_style_score": 3.0,
+      "r2": 0.1488
+    },
+    "159682.SZ": {
+      "name": "创业板50ETF",
+      "mkt": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 0.3578
+      },
+      "smb": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 0.917
+      },
+      "hml": {
+        "score": 3,
+        "label": "不显著",
+        "beta": -0.916
+      },
+      "rmw": {
+        "score": 3,
+        "label": "不显著",
+        "beta": -0.3272
+      },
+      "cma": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 1.3878
+      },
+      "avg_style_score": 3.0,
+      "r2": 0.1076
+    },
+    "QQQ.US": {
+      "name": "纳斯达克100ETF",
+      "mkt": {
+        "score": 3,
+        "label": "中性",
+        "beta": 0.9583
+      },
+      "smb": {
+        "score": 3,
+        "label": "不显著",
+        "beta": -0.1627
+      },
+      "hml": {
+        "score": 3,
+        "label": "中性",
+        "beta": -0.3994
+      },
+      "rmw": {
+        "score": 3,
+        "label": "不显著",
+        "beta": -0.2294
+      },
+      "cma": {
+        "score": 3,
+        "label": "不显著",
+        "beta": 0.2199
+      },
+      "avg_style_score": 3.0,
+      "r2": 0.9219
+    }
+  },
+  "l3_risk_scores": {
+    "513130.SH": {
+      "name": "恒生科技ETF",
+      "var_score": 3,
+      "cvar_score": 3,
+      "dd_score": 1,
+      "var_trend_score": 4,
+      "avg_risk_score": 2.8
+    },
+    "513310.SH": {
+      "name": "中韩半导体ETF",
+      "var_score": 1,
+      "cvar_score": 1,
+      "dd_score": 1,
+      "var_trend_score": 5,
+      "avg_risk_score": 2.0
+    },
+    "159682.SZ": {
+      "name": "创业板50ETF",
+      "var_score": 3,
+      "cvar_score": 4,
+      "dd_score": 4,
+      "var_trend_score": 4,
+      "avg_risk_score": 3.8
+    },
+    "QQQ.US": {
+      "name": "纳斯达克100ETF",
+      "var_score": 4,
+      "cvar_score": 4,
+      "dd_score": 3,
+      "var_trend_score": 3,
+      "avg_risk_score": 3.5
+    }
+  },
+  "portfolio_risk_score": 3.0
+}

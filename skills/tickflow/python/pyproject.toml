@@ -4,5 +4,6 @@ version = "0.1.0"
 description = "TickFlow workspace for market data analysis"
 requires-python = ">=3.10"
 dependencies = [
+    "scipy>=1.15.3",
     "tickflow[all]>=0.1.17",
 ]
