@@ -1,0 +1,17 @@
+{
+  "name": "seedance",
+  "version": "0.1.0",
+  "llm": {
+    "provider": "openai",
+    "baseUrl": "https://api.deepseek.com",
+    "model": "deepseek-v4-flash"
+  },
+  "notify": [],
+  "daemon": {
+    "schedule": {
+      "radarCron": "0 */6 * * *",
+      "writeCron": "*/15 * * * *"
+    },
+    "maxConcurrentBooks": 3
+  }
+}

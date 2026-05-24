@@ -1,0 +1,47 @@
+# 敏感信息
+.env
+.env.local
+*.key
+*.pem
+.secrets
+.zshrc
+.bashrc
+.bash_profile
+
+# 临时文件
+*.pyc
+__pycache__
+*.log
+*.tmp
+.DS_Store
+
+# 虚拟环境
+.venv
+venv
+env/
+
+# 数据文件
+*.csv
+*.xlsx
+*.parquet
+*.pickle
+
+# IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OpenClaw 个人配置（不推送到公开研究仓库）
+AGENTS.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TODO.md
+TOOLS.md
+USER.md
+memory/
+.clawhub/
+.openclaw/
+skills/mineru-ai/

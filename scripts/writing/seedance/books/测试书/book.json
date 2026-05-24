@@ -1,0 +1,11 @@
+{
+  "id": "测试书",
+  "title": "测试书",
+  "platform": "tomato",
+  "genre": "urban",
+  "status": "outlining",
+  "targetChapters": 4,
+  "chapterWordCount": 3000,
+  "createdAt": "2026-05-07T06:09:04.911Z",
+  "updatedAt": "2026-05-07T06:09:04.911Z"
+}
