@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/raw_market.schema.json",
+  "title": "Raw Market Data",
+  "description": "Standardized container for ETF market data (prices, technicals, valuation, flows). One file per snapshot date. Asset keys use standard ticker codes with market suffix.",
+  "type": "object",
+  "required": ["timestamp", "assets"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data snapshot timestamp (aligned to trading day)"
+    },
+    "data_date": {
+      "type": "string",
+      "format": "date",
+      "description": "The trading day this data represents"
+    },
+    "assets": {
+      "type": "object",
+      "description": "Per-asset market data, keyed by <TICKER>.<MARKET>",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "price", "technicals", "source"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Human-readable asset name",
+            "examples": ["恒生科技ETF", "中韩半导体ETF", "创业板50ETF", "纳斯达克100ETF", "博时黄金ETF联接C"]
+          },
+          "price": {
+            "type": "object",
+            "required": ["close", "date"],
+            "properties": {
+              "open": { "type": "number", "description": "开盘价" },
+              "high": { "type": "number", "description": "最高价" },
+              "low": { "type": "number", "description": "最低价" },
+              "close": { "type": "number", "description": "收盘价" },
+              "prev_close": { "type": "number", "description": "前收盘价" },
+              "change_pct": { "type": "number", "description": "涨跌幅(%)" },
+              "volume": { "type": "number", "description": "成交量(手)" },
+              "amount": { "type": "number", "description": "成交额(万元)" },
+              "volume_ratio": { "type": "number", "description": "量比" },
+              "date": { "type": "string", "format": "date", "description": "交易日" }
+            }
+          },
+          "technicals": {
+            "type": "object",
+            "description": "Technical indicators computed from daily price data",
+            "properties": {
+              "ma5": { "type": "number", "description": "5日均线" },
+              "ma10": { "type": "number", "description": "10日均线" },
+              "ma20": { "type": "number", "description": "20日均线" },
+              "ma60": { "type": "number", "description": "60日均线" },
+              "ma120": { "type": "number", "description": "120日均线" },
+              "ma_bullish": {
+                "type": "boolean",
+                "description": "短均线(5)在长均线(20/60/120)之上"
+              },
+              "ma_super_bullish": {
+                "type": "boolean",
+                "description": "5>10>20>60 全部多头排列"
+              },
+              "macd_dif": { "type": "number", "description": "MACD DIF" },
+              "macd_dea": { "type": "number", "description": "MACD DEA" },
+              "macd_bar": { "type": "number", "description": "MACD 柱" },
+              "macd_bullish": { "type": "boolean", "description": "MACD DIF > DEA" },
+              "rsi": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "14日 RSI"
+              },
+              "bb_upper": { "type": "number", "description": "布林带上轨" },
+              "bb_mid": { "type": "number", "description": "布林带中轨(MA20)" },
+              "bb_lower": { "type": "number", "description": "布林带下轨" },
+              "bb_position": {
+                "type": "number",
+                "description": "价格在布林带位置(%), >100=突破上轨, <0=突破下轨"
+              },
+              "bb_width": { "type": "number", "description": "布林带宽度(%)" },
+              "atr": {
+                "type": "number",
+                "description": "14日 ATR (平均真实波幅)"
+              },
+              "resistance_20d": { "type": "number", "description": "20日高点(压力位)" },
+              "support_20d": { "type": "number", "description": "20日低点(支撑位)" },
+              "resistance_60d": { "type": "number", "description": "60日高点" },
+              "support_60d": { "type": "number", "description": "60日低点" },
+              "pct_above_ma20": { "type": "number", "description": "价格较 MA20 偏离(%)" },
+              "pct_above_ma60": { "type": "number", "description": "价格较 MA60 偏离(%)" },
+              "pct_above_ma200": { "type": "number", "description": "价格较 MA200 偏离(%)" },
+              "roc_20d": { "type": "number", "description": "20日变动率(%)" }
+            }
+          },
+          "valuation": {
+            "type": "object",
+            "properties": {
+              "pe_ttm": { "type": "number", "description": "滚动市盈率" },
+              "pb": { "type": "number", "description": "市净率" },
+              "pe_percentile_1y": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "PE 1年历史分位数(%)"
+              },
+              "pb_percentile_1y": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "PB 1年历史分位数(%)"
+              },
+              "pe_percentile_3y": {
+                "type": "number",
+                "description": "PE 3年历史分位数(%)"
+              },
+              "premium_rate": {
+                "type": "number",
+                "description": "溢价率(%), ETF市价 vs IOPV"
+              }
+            }
+          },
+          "fund_flows": {
+            "type": "object",
+            "properties": {
+              "net_flow_1w": {
+                "type": "number",
+                "description": "近一周资金净流入(万元)"
+              },
+              "net_flow_1m": {
+                "type": "number",
+                "description": "近一月资金净流入(万元)"
+              },
+              "fund_size": {
+                "type": "number",
+                "description": "基金规模(亿元)"
+              }
+            }
+          },
+          "momentum": {
+            "type": "object",
+            "description": "Multi-horizon return metrics",
+            "properties": {
+              "ret_1w": { "type": "number", "description": "1周收益(%)" },
+              "ret_1m": { "type": "number", "description": "1月收益(%)" },
+              "ret_3m": { "type": "number", "description": "3月收益(%)" },
+              "ret_6m": { "type": "number", "description": "6月收益(%)" },
+              "ret_12m": { "type": "number", "description": "12月收益(%)" },
+              "momentum_12_1": {
+                "type": "number",
+                "description": "12月收益 - 最近1月收益"
+              }
+            }
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "enum": ["TickFlow", "qveris", "cn_financial_pro", "FMP"],
+                "description": "Primary data provider"
+              },
+              "verified": { "type": "boolean" },
+              "verification_provider": { "type": "string" },
+              "verification_diff_pct": { "type": "number" }
+            }
+          }
+        }
+      },
+      "propertyNames": {
+        "pattern": "^(513130\\.SH|513310\\.SH|159682\\.SZ|159632\\.SZ|QQQ\\.US|002610\\.OF|AU9999|USDT\\.STB)$"
+      }
+    }
+  }
+}

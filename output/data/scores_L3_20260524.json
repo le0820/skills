@@ -1,0 +1,120 @@
+{
+  "timestamp": "2026-05-24T05:53:32Z",
+  "framework_version": "三层多因子投研框架 v1.4 + 评分可解释性手册 v1.1 + p1_upgrade v1.0",
+  "sentiment": {
+    "indicators": [
+      {
+        "name": "vix",
+        "label": "VIX",
+        "value": 16.70,
+        "score": 2,
+        "scoring_rule": "12≤VIX<17→score 2（平静偏乐观）",
+        "data_source": "Yahoo Finance/FRED: VIX=16.70 as May 22 close",
+        "trend": "stable",
+        "rationale": "VIX 16.7处于『平静』区间，从前期18+回落。非恐慌也不是过度自满。低VIX+市场近高位暗示不排除自满风险但未达到<12阈值"
+      },
+      {
+        "name": "put_call",
+        "label": "Put/Call",
+        "value": 3,
+        "score": 3,
+        "scoring_rule": "无实时数据→中性假设。Put/Call≈0.6-0.8估算",
+        "data_source": "未获取到实时数据，基于低VIX环境中性估算",
+        "trend": "stable",
+        "rationale": "Put/Call数据不可用，SPX近高位+VIX低→Call偏多，取中性3"
+      },
+      {
+        "name": "aaii_survey",
+        "label": "AAII Bull-Bear Spread",
+        "value": -11.9,
+        "score": 2,
+        "scoring_rule": "-20%~-10%→score 2（悲观，逆向信号）",
+        "data_source": "AAII Survey week May 21, 2026: Bullish 31.7%, Bearish 43.6%, Spread=-11.9%",
+        "trend": "deteriorating",
+        "rationale": "AAII散户极度悲观(Bear 43.6% > Bull 31.7%)，Spread -11.9%在-20%~-10%悲区间。逆向信号：散户悲观反而是历史底部机会。上周还曾报Bullish 39.3%→这周下降到31.7%，情绪急转恶化"
+      },
+      {
+        "name": "dxy",
+        "label": "美元指数",
+        "value": 99.24,
+        "score": 4,
+        "scoring_rule": "走弱（对新兴市场有利）→base 3 + score_adjustment +1 = 4",
+        "data_source": "WSJ DXY historical: May 22 close 99.24. 趋势: 99.33(5/19)→99.09(5/20)→99.26(5/21)→99.24(5/22)",
+        "trend": "improving",
+        "rationale": "DXY 99.24处于走弱趋势，低于100关口对新兴市场/CN资产有利。小幅走弱=score 4"
+      },
+      {
+        "name": "credit_spread",
+        "label": "信用利差",
+        "value": 3,
+        "score": 3,
+        "scoring_rule": "保持→base 3 + score_adjustment 0 = 3",
+        "data_source": "无实时IG OAS数据，基于VIX 16.7低波动环境判断",
+        "trend": "stable",
+        "rationale": "VIX 16.7+SPX健康→信用利差中性偏稳。无信用冻结或显著扩大信号。取中性3"
+      }
+    ],
+    "composite": 2.80
+  },
+  "risk": {
+    "indicators": [
+      {
+        "name": "var_95_1d",
+        "label": "VaR(95%,1d)",
+        "score": 2.75,
+        "scoring_rule": "每ETF VaR→评分→等权平均",
+        "data_source": "p1_upgrade_v1.0 from TickFlow 500日日线滚动60日窗口"
+      },
+      {
+        "name": "cvar_95_1d",
+        "label": "CVaR(95%,1d)",
+        "score": 3.0,
+        "scoring_rule": "每ETF CVaR→评分→等权平均",
+        "data_source": "p1_upgrade_v1.0"
+      },
+      {
+        "name": "max_drawdown_60d",
+        "label": "60日最大回撤",
+        "score": 2.25,
+        "scoring_rule": "每ETF 60d DD→评分→等权平均",
+        "data_source": "p1_upgrade_v1.0"
+      },
+      {
+        "name": "var_trend",
+        "label": "VaR趋势",
+        "score": 2.75,
+        "scoring_rule": "VaR 20d MA vs 40d MA变化→评分→等权平均",
+        "data_source": "p1_upgrade_v1.0"
+      }
+    ],
+    "per_asset": {
+      "513130.SH": {
+        "ann_volatility": 29.95, "sharpe_ratio": 0.36,
+        "var_daily_95pct": -2.87, "var_daily_99pct": -3.23, "cvar_daily_95pct": -3.15,
+        "max_dd_pct": -32.7, "dd_60d_pct": -32.7, "in_drawdown_now": true, "recovery_days": 31,
+        "var_trend_pct": 1.1, "var_trend_direction": "stable"
+      },
+      "513310.SH": {
+        "ann_volatility": 40.67, "sharpe_ratio": 1.89,
+        "var_daily_95pct": -6.02, "var_daily_99pct": -8.15, "cvar_daily_95pct": -7.5,
+        "max_dd_pct": -23.46, "dd_60d_pct": -23.39, "in_drawdown_now": true, "recovery_days": 7,
+        "var_trend_pct": 1.9, "var_trend_direction": "stable"
+      },
+      "159682.SZ": {
+        "ann_volatility": 38.24, "sharpe_ratio": 1.18,
+        "var_daily_95pct": -2.36, "var_daily_99pct": -2.92, "cvar_daily_95pct": -2.79,
+        "max_dd_pct": -38.71, "dd_60d_pct": -7.68, "in_drawdown_now": true, "recovery_days": 99,
+        "var_trend_pct": -3.3, "var_trend_direction": "stable"
+      },
+      "QQQ.US": {
+        "ann_volatility": 21.24, "sharpe_ratio": 1.09,
+        "var_daily_95pct": -1.74, "var_daily_99pct": -2.15, "cvar_daily_95pct": -2.08,
+        "max_dd_pct": -23.38, "dd_60d_pct": -12.61, "in_drawdown_now": false, "recovery_days": 56,
+        "var_trend_pct": 7.0, "var_trend_direction": "deteriorating"
+      }
+    },
+    "composite": 2.69
+  },
+  "composite": { "value": 2.75 },
+  "assessment": "L3综合2.75偏弱。情绪端2.80受AAII大幅回落拖累（散户悲观），风险端2.69受高波ETF(VaR)和60d回撤压制。持有组合（159682 3.5 + QQQ 3.2）的风险状况优于全宇宙均值。核心关注：QQQ VaR扩大趋势(+7%)需持续监控"
+}

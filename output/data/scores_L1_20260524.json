@@ -1,0 +1,185 @@
+{
+  "timestamp": "2026-05-24T05:53:32Z",
+  "framework_version": "三层多因子投研框架 v1.4 + 评分可解释性手册 v1.1",
+  "us": {
+    "factors": [
+      {
+        "name": "employment_growth",
+        "label": "就业/增长",
+        "weight": 0.20,
+        "score": 4,
+        "data": {
+          "indicators": {
+            "nonfarm_payroll": { "value": 160, "unit": "K", "reference": "vs 55-65K consensus" },
+            "unemployment_rate": { "value": 4.1, "unit": "%", "reference": "previous 4.1%" },
+            "trailing_3m_avg": { "value": 82, "unit": "K", "reference": "Feb -92K; Mar 178K; Apr 160K" }
+          },
+          "data_source": "CNBC/Investing.com/BLS via web_search"
+        },
+        "scoring_method": "规则: score 4 → 非农=预期 1.5-2x 或 符合预期+趋势向上。April +160K vs ~55K共识 = ~2.9x超预期",
+        "rationale": "April nonfarm 160K大幅超出55-65K共识，但3月均值~82K仍偏弱（qualitative_note软约束排除5分）。趋势从Feb负值恢复，就业市场韧性但非强劲"
+      },
+      {
+        "name": "inflation_wages",
+        "label": "通胀/工资",
+        "weight": 0.20,
+        "score": 2,
+        "data": {
+          "indicators": {
+            "core_pce_yoy": { "value": 3.2, "unit": "%", "reference": "2月3.0%→3月3.2%" },
+            "pce_yoy": { "value": 3.5, "unit": "%", "reference": "2月2.8%→3月3.5%" },
+            "brent_price": { "value": 104.25, "unit": "USD/bbl", "reference": "FT data, near $105 threshold" }
+          },
+          "data_source": "FOMC 4月会议纪要/FT/Investing.com via web_search"
+        },
+        "scoring_method": "规则: CPI 3-4%→score 3; 油价>$90扣1→score 2",
+        "rationale": "PCE 3.5%处于CPI 3-4%区间(base 3)，布伦特$104.25>$90(扣1→2)。通胀粘性获FOMC纪要确认，核心PCE连续恶化(3.0→3.2)。油价虽未突破$105但接近阈值"
+      },
+      {
+        "name": "monetary_policy",
+        "label": "货币政策",
+        "weight": 0.20,
+        "score": 2,
+        "data": {
+          "indicators": {
+            "fed_rate": { "value": 4.25, "unit": "%", "reference": "当前联邦基金利率" },
+            "rate_hike_probability": { "value": 30, "unit": "%", "reference": "2027年前加息概率" },
+            "fed_stance": { "value": "sticky", "unit": "", "reference": "FOMC纪要确认通胀粘性" }
+          },
+          "data_source": "FOMC 5月会议纪要(5/20发布)"
+        },
+        "scoring_method": "规则: score 2 → 利率不变但有加息风险（官员警告+CPI粘性）",
+        "rationale": "FOMC纪要确认通胀粘性，~30%概率2027年前加息，降息推迟H2 2026。非明确加息周期但加息风险显著上升，符合score 2定义"
+      },
+      {
+        "name": "financial_conditions",
+        "label": "金融条件",
+        "weight": 0.20,
+        "score": 4,
+        "data": {
+          "indicators": {
+            "vix": { "value": 16.70, "unit": "", "reference": "VIX 12-17平静偏乐观区间" },
+            "spx_level": { "value": 7473.47, "unit": "pts", "reference": "近历史高位" },
+            "30y_ust": { "value": 5.07, "unit": "%", "reference": "从5.19%回落" },
+            "dxy": { "value": 99.24, "unit": "", "reference": "走弱中" }
+          },
+          "data_source": "WSJ/MarketWatch/FRED via web_search"
+        },
+        "scoring_method": "规则: score 4 → VIX 15-18 + 股指健康 + 信用中性",
+        "rationale": "VIX 16.7处于15-18舒适区间，SPX 7473近高位平稳，30Y从5.19%回落至5.07%缓解了前期紧张。DXY 99.24偏弱有利于新兴市场。信用利差未见明显扩大信号"
+      },
+      {
+        "name": "geopolitical_risk",
+        "label": "地缘冲击",
+        "weight": 0.20,
+        "score": 4,
+        "data": {
+          "indicators": {
+            "iran_conflict": { "value": "partial_ceasefire", "unit": "", "reference": "FOMC: 4月中东停火" },
+            "tariff_uncertainty": { "value": "present", "unit": "", "reference": "贸易摩擦持续但未升级" }
+          },
+          "data_source": "FOMC纪要/web_search综合"
+        },
+        "scoring_method": "规则: score 4 → 局部紧张，无直接经济影响",
+        "rationale": "中东停火部分缓解了前期最紧张的局面，伊朗冲突风险下降为『局部紧张』。关税不确定性仍在但未见大幅升级。整体地缘风险评级上调至4分"
+      }
+    ],
+    "composite": 3.20
+  },
+  "cn": {
+    "factors": [
+      {
+        "name": "manufacturing",
+        "label": "制造业",
+        "weight": 0.25,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "pmi_mfg": { "value": 50.3, "unit": "", "reference": "略高于荣枯线" },
+            "pmi_non_mfg": { "value": 49.4, "unit": "", "reference": "收缩区(-0.6)" },
+            "exports_yoy": { "value": "strong", "unit": "", "reference": "FOMC: 外需强劲（定性）" }
+          },
+          "data_source": "cn_financial_pro macro_china via qveris"
+        },
+        "scoring_method": "规则: score 3 → PMI 49-50 + 出口持平或略降 → 此处PMI 50.3略好于49-50区间但仍弱于50-51",
+        "rationale": "PMI 50.3仅略高于荣枯线，非制造PMI 49.4进入收缩是隐忧。出口外需强劲但内需拖累严重。50.3介于score 3(49-50)和score 4(50-51)边界，取3偏保守"
+      },
+      {
+        "name": "consumption",
+        "label": "消费/内需",
+        "weight": 0.20,
+        "score": 2,
+        "data": {
+          "indicators": {
+            "retail_sales_yoy": { "value": 0.2, "unit": "%", "reference": "极弱" },
+            "pmi_non_mfg": { "value": 49.4, "unit": "", "reference": "收缩区" },
+            "cpi_yoy": { "value": 1.2, "unit": "%", "reference": "通缩边缘" }
+          },
+          "data_source": "cn_financial_pro macro_china via qveris"
+        },
+        "scoring_method": "规则: score 2 → 零售 0-1% + 非制造<50（收缩区）",
+        "rationale": "零售销售0.2%几乎停滞，非制造PMI 49.4确认服务收缩，CPI仅1.2%接近通缩边缘。内需疲弱清晰，符合score 2"
+      },
+      {
+        "name": "credit",
+        "label": "信贷/流动性",
+        "weight": 0.20,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "m2_yoy": { "value": 8.6, "unit": "%", "reference": "温和增长" },
+            "m1_yoy": { "value": 5.0, "unit": "%", "reference": "转正" },
+            "tsf_monthly": { "value": 22075, "unit": "亿CNY", "reference": "月增量约2.2万亿" },
+            "lpr_1y": { "value": 3.0, "unit": "%", "reference": "未变" },
+            "lpr_5y": { "value": 3.5, "unit": "%", "reference": "未变" }
+          },
+          "data_source": "cn_financial_pro macro_china via qveris"
+        },
+        "scoring_method": "规则: score 3 → TSF减速但仍正增长 + M2增速与名义GDP匹配",
+        "rationale": "M2 8.6%偏稳，M1 5.0%转正（前期塌方后改善），但M1-M2剪刀差-3.6%仍显示资金活性不足。TSF月增2.2万亿中等水平。LPR不变。整体中性-偏弱"
+      },
+      {
+        "name": "real_estate",
+        "label": "房地产",
+        "weight": 0.15,
+        "score": 2,
+        "data": {
+          "indicators": {
+            "new_home_price_yoy": { "value": "not_available", "unit": "", "reference": "未更新，趋势偏弱" },
+            "second_hand_price_yoy": { "value": "not_available", "unit": "", "reference": "未更新，前期持续下行" }
+          },
+          "data_source": "综合判断（70城数据未在本次管线拉取）"
+        },
+        "scoring_method": "规则: score 2 → 降幅加速或二手恶化独立于新房",
+        "rationale": "无最新房价数据，但前期趋势仍在底部区间。地产行业未见反转信号，保留score 2"
+      },
+      {
+        "name": "policy",
+        "label": "政策/外部",
+        "weight": 0.20,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "lpr_1y": { "value": 3.0, "unit": "%", "reference": "未调整" },
+            "lpr_5y": { "value": 3.5, "unit": "%", "reference": "未调整" },
+            "fiscal_stance": { "value": "neutral", "unit": "", "reference": "保持定力" },
+            "tariff_status": { "value": "stable", "unit": "", "reference": "中美关税未升级" }
+          },
+          "data_source": "cn_financial_pro + web_search"
+        },
+        "scoring_method": "规则: score 3 → 政策不变（保持定力），保留空间",
+        "rationale": "LPR连续未调整，既无新宽松也无收紧。中美关税环境未恶化。政策面中性=score 3"
+      }
+    ],
+    "composite": 2.60
+  },
+  "composite": {
+    "value": 2.96,
+    "weights": { "us": 0.60, "cn": 0.40 }
+  },
+  "jp_reference": {
+    "score": 2.17,
+    "note": "未更新。USDJPY~159, JGB 10Y~2.79%。参考5/21评分不变"
+  },
+  "assessment": "L1宏观环境弱于中性(2.96)。US端(3.20)就业支撑+金融条件良好对冲通胀粘性和加息风险；CN端(2.60)消费停滞+制造业临界是核心拖累。核心矛盾：NVDA强劲增长vs宏观约束(通胀+利率+油价)持续。5/28 PCE是关键枢轴"
+}

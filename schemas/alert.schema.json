@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/alert.schema.json",
+  "title": "Alert / Trigger Event",
+  "description": "Standardized format for each triggered alert in the monitoring system. Supports the 15 defined trigger conditions, 4-tier alert levels, and push throttling rules.",
+  "type": "object",
+  "required": ["alert_id", "timestamp", "trigger_id", "level", "current_value", "threshold", "recommended_action"],
+  "properties": {
+    "alert_id": {
+      "type": "string",
+      "description": "Unique alert identifier, format: ALERT_<TRIGGER_ID>_<YYYYMMDDHHMMSS>",
+      "pattern": "^ALERT_\\d{2}_\\d{14}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Alert generation timestamp"
+    },
+    "trigger_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Trigger condition ID (1-15 are defined triggers; 16-20 reserved for system health triggers)"
+    },
+    "level": {
+      "type": "string",
+      "enum": ["red", "orange", "yellow", "blue", "green"],
+      "description": "Alert severity level. red=action, orange=prepare, yellow=watch, blue=info, green=opportunity"
+    },
+    "label": {
+      "type": "string",
+      "description": "Human-readable trigger name",
+      "examples": ["30Y UST", "VIX", "总账户回撤", "布伦特周涨", "SPX破MA200"]
+    },
+    "current_value": {
+      "type": "number",
+      "description": "Current value of the monitored metric"
+    },
+    "threshold": {
+      "type": "number",
+      "description": "The threshold value that was crossed"
+    },
+    "comparison": {
+      "type": "string",
+      "enum": ["above", "below", "equal"],
+      "description": "Whether current value is above or below the threshold"
+    },
+    "deterioration_pct": {
+      "type": "number",
+      "description": "How much worse since last alert (for repeat filtering). Positive = worsening."
+    },
+    "raw_data": {
+      "type": "object",
+      "description": "Supporting data points that provide context for this alert",
+      "properties": {
+        "metric": { "type": "string" },
+        "value": { "type": "number" },
+        "previous_value": { "type": "number" },
+        "trend": { "type": "string", "enum": ["rising", "falling", "flat"] },
+        "data_source": { "type": "string" }
+      }
+    },
+    "recommended_action": {
+      "type": "string",
+      "description": "Specific, actionable recommendation. Must not be empty. Per push throttling rules: no alerts without actionable content."
+    },
+    "time_slot": {
+      "type": "string",
+      "enum": ["pre_open", "intraday", "after_hours", "night", "weekend"],
+      "description": "Time slot classification for push routing"
+    },
+    "throttling": {
+      "type": "object",
+      "description": "Push throttling metadata per monitoring rules",
+      "required": ["repeat_allowed_24h", "max_daily_push"],
+      "properties": {
+        "repeat_allowed_24h": {
+          "type": "boolean",
+          "description": "Can this alert repeat within 24h? (Only if deterioration >20%)"
+        },
+        "max_daily_push": {
+          "type": "integer",
+          "description": "Max pushes per day for this level (yellow: 1, others: unbounded)"
+        },
+        "same_trigger_last_alert": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of last alert for this same trigger"
+        },
+        "push_now": {
+          "type": "boolean",
+          "description": "Based on time-slot + level + throttling, should this alert be pushed now?"
+        }
+      }
+    },
+    "falsification": {
+      "type": "object",
+      "description": "Conditions that would void or downgrade this alert",
+      "properties": {
+        "falsifies_if": { "type": "string" },
+        "downgrades_if": { "type": "string" }
+      }
+    },
+    "related_alerts": {
+      "type": "array",
+      "description": "Other currently active alerts related to this one",
+      "items": { "type": "string" }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "acknowledged", "resolved", "expired", "false_alarm"],
+      "description": "Alert lifecycle status"
+    }
+  }
+}

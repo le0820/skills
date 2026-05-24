@@ -1,0 +1,74 @@
+{
+  "_description": "Weight Matrix — all calibrated weights in the scoring system. Compiled from README + 三层多因子 + 评分可解释性手册. If any weight changes, update this file and note the SOP version.",
+  "_version": "compiled-2026-05-24",
+  "composite_weights": {
+    "_source": "评分可解释性手册 §四",
+    "_versions": {
+      "v1.1_20260509": { "L1": 0.35, "L2": 0.25, "bond": 0.10, "L3_sentiment": 0.15, "L3_risk": 0.15 },
+      "current": { "L1": 0.40, "L2": 0.30, "L3": 0.30 },
+      "_note": "v1.1 separating bond and risk; current consolidated to L1+L2+L3. Use 'current'."
+    },
+    "L1": 0.40,
+    "L2": 0.30,
+    "L3": 0.30,
+    "formula": "L1 × 0.40 + L2 × 0.30 + L3 × 0.30"
+  },
+  "L1_weights": {
+    "us_cn": { "us": 0.60, "cn": 0.40, "jp": 0.15, "_note": "JP not in current composite" },
+    "us_factor_weights": {
+      "employment_growth": 0.20,
+      "inflation_wages": 0.20,
+      "monetary_policy": 0.20,
+      "financial_conditions": 0.20,
+      "geopolitical_risk": 0.20
+    },
+    "cn_factor_weights": {
+      "manufacturing": 0.25,
+      "consumption": 0.20,
+      "credit": 0.20,
+      "real_estate": 0.15,
+      "policy": 0.20
+    }
+  },
+  "L2_weights": {
+    "factors": {
+      "momentum": 0.20,
+      "value": 0.20,
+      "growth": 0.20,
+      "profitability": 0.20,
+      "size": 0.20
+    },
+    "etf_equal_weight": true,
+    "_note": "All 5 factors equal weight (0.20). Per-ETF scoring → equal-weight average → factor score."
+  },
+  "L3_weights": {
+    "sentiment": 0.50,
+    "risk": 0.50,
+    "sentiment_factors": {
+      "vix": 0.20, "put_call": 0.20, "aaii_survey": 0.20, "dxy": 0.20, "credit_spread": 0.20
+    },
+    "risk_factors": {
+      "var_95_1d": 0.25, "cvar_95_1d": 0.25, "max_drawdown_60d": 0.25, "var_trend": 0.25
+    }
+  },
+  "cross_validation_adjustments": {
+    "crude_oil": {
+      "description": "原油交叉验证对L1的修正",
+      "range": "±0.1 ~ ±0.3",
+      "rules": {
+        "oil_above_105": "L1 US inflation must be re-evaluated, regardless of contradiction",
+        "oil_up_10y_up_gold_up": "All three rising → stagflation → L1 US MUST drop ≥0.5",
+        "oil_down_10y_down_gold_down": "All three falling → deflation/recession → increase bond allocation",
+        "gold_oil_ratio_above_25_with_low_vix": "Contradiction signal → pre-judge risk event"
+      }
+    }
+  },
+  "asset_allocation_weights": {
+    "_note": "五资产仓位分配权重（在仓位中枢内部分配）",
+    "159682": { "role": "attack", "label": "A股大盘科技成长(创业板50)" },
+    "159632": { "role": "attack", "label": "美股科技(纳斯达克ETF)" },
+    "黄金ETF": { "role": "defense", "label": "博时黄金ETF联接C" },
+    "红利低波": { "role": "defense", "label": "A股高股息价值" },
+    "USDT": { "role": "cash", "label": "跨境美元理财/稳定币" }
+  }
+}

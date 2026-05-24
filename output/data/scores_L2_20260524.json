@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-05-24T05:53:32Z",
+  "framework_version": "三层多因子投研框架 v1.4 + 评分可解释性手册 v1.1 + p1_upgrade v1.0",
+  "etf_universe": ["513130.SH", "513310.SH", "159682.SZ", "QQQ.US"],
+  "factors": [
+    {
+      "name": "momentum",
+      "label": "动量(12-1月)",
+      "weight": 0.20,
+      "score": 4.0,
+      "scoring_method": "每只ETF计算12-1月动量，得分后等权平均",
+      "per_asset": {
+        "513130.SH": { "raw_value": -10.4, "unit": "%", "score": 2, "rationale": "-10.4%处于-20%~0%区间" },
+        "513310.SH": { "raw_value": 193.87, "unit": "%", "score": 5, "rationale": ">+50%，但含停牌溢价失真" },
+        "159682.SZ": { "raw_value": 97.0, "unit": "%", "score": 5, "rationale": ">+50%，AI+新能源双驱动" },
+        "QQQ.US": { "raw_value": 28.28, "unit": "%", "score": 4, "rationale": "+20%~+50%，NVDA财报后加速" }
+      }
+    },
+    {
+      "name": "value",
+      "label": "价值(HML)",
+      "weight": 0.20,
+      "score": 2.75,
+      "scoring_method": "FF5 HML β映射，显著β取分，不显著取中性3",
+      "per_asset": {
+        "513130.SH": { "score": 3, "ff5_beta": 0.7826, "ff5_t_stat": 0.67, "ff5_significant": false, "rationale": "t=0.67不显著→中性3" },
+        "513310.SH": { "score": 3, "ff5_beta": 0.2796, "ff5_t_stat": 0.19, "ff5_significant": false, "rationale": "t=0.19不显著→中性3" },
+        "159682.SZ": { "score": 3, "ff5_beta": -0.8287, "ff5_t_stat": -0.55, "ff5_significant": false, "rationale": "t=-0.55不显著→中性3。CN-FF显示β_hml=-0.63(t=-3.46✅显著偏成长)但框架统一取FF5" },
+        "QQQ.US": { "score": 2, "ff5_beta": -0.4111, "ff5_t_stat": -2.08, "ff5_significant": true, "rationale": "t=-2.08显著，β=-0.41在-0.8~-0.4→偏成长(score 2)" }
+      }
+    },
+    {
+      "name": "growth",
+      "label": "成长(RMW+CMA反)",
+      "weight": 0.20,
+      "score": 2.9,
+      "scoring_method": "RMW分数×0.5 + CMA分数×0.5",
+      "per_asset": {
+        "513130.SH": { "score": 3.0, "rmw_beta": 0.6632, "rmw_t": 0.61, "rmw_sig": false, "cma_beta": -0.1512, "cma_t": -0.13, "cma_sig": false, "rationale": "均不显著→3" },
+        "513310.SH": { "score": 3.0, "rmw_beta": -0.6817, "rmw_t": -0.49, "rmw_sig": false, "cma_beta": 1.2218, "cma_t": 0.82, "cma_sig": false, "rationale": "均不显著→3" },
+        "159682.SZ": { "score": 3.0, "rmw_beta": -0.3617, "rmw_t": -0.26, "rmw_sig": false, "cma_beta": 1.3883, "cma_t": 0.93, "cma_sig": false, "rationale": "均不显著→3。CN-FF显示β_hml=-0.63(t=-3.46✅显著偏成长)但FF5模型R²仅0.117" },
+        "QQQ.US": { "score": 2.5, "rmw_beta": -0.4372, "rmw_t": -2.43, "rmw_sig": true, "cma_beta": 0.3879, "cma_t": 2.00, "cma_sig": true, "rationale": "RMW=-0.44(score 2弱盈利)×0.5 + CMA=0.39(score 3中性)×0.5=2.5" }
+      }
+    },
+    {
+      "name": "profitability",
+      "label": "盈利(RMW)",
+      "weight": 0.20,
+      "score": 2.75,
+      "scoring_method": "FF5 RMW β映射",
+      "per_asset": {
+        "513130.SH": { "score": 3, "ff5_beta": 0.6632, "ff5_t_stat": 0.61, "ff5_significant": false, "rationale": "不显著→3" },
+        "513310.SH": { "score": 3, "ff5_beta": -0.6817, "ff5_t_stat": -0.49, "ff5_significant": false, "rationale": "不显著→3" },
+        "159682.SZ": { "score": 3, "ff5_beta": -0.3617, "ff5_t_stat": -0.26, "ff5_significant": false, "rationale": "不显著→3" },
+        "QQQ.US": { "score": 2, "ff5_beta": -0.4372, "ff5_t_stat": -2.43, "ff5_significant": true, "rationale": "显著，β=-0.44在-0.8~-0.4→score 2(盈利偏弱)" }
+      }
+    },
+    {
+      "name": "size",
+      "label": "规模(SMB)",
+      "weight": 0.20,
+      "score": 3.0,
+      "scoring_method": "FF5 SMB β映射。大盘稳定偏好：大盘=高分",
+      "per_asset": {
+        "513130.SH": { "score": 3, "ff5_beta": -1.2391, "ff5_t_stat": -1.27, "ff5_significant": false, "rationale": "不显著→3" },
+        "513310.SH": { "score": 3, "ff5_beta": -0.2873, "ff5_t_stat": -0.23, "ff5_significant": false, "rationale": "不显著→3" },
+        "159682.SZ": { "score": 3, "ff5_beta": 0.8818, "ff5_t_stat": 0.71, "ff5_significant": false, "rationale": "不显著→3" },
+        "QQQ.US": { "score": 3, "ff5_beta": -0.1741, "ff5_t_stat": -1.07, "ff5_significant": false, "rationale": "不显著→3" }
+      }
+    }
+  ],
+  "ff5_regression": {
+    "method": "US_FF5 + CN_FF",
+    "etf_assignments": {
+      "QQQ.US": { "model": "US_FF5", "r2": 0.869, "n_months": 23, "alpha_monthly": -0.0012, "alpha_annual": -0.0143 },
+      "513130.SH": { "model": "US_FF5(main)/CN_FF", "r2": 0.136, "n_months": 24, "alpha_annual": -0.102, "note": "FF5不解释该ETF" },
+      "513310.SH": { "model": "US_FF5(main)/CN_FF", "r2": 0.137, "n_months": 24, "alpha_annual": 0.434, "note": "FF5不解释，CN_FF R²=0.496" },
+      "159682.SZ": { "model": "US_FF5(main)/CN_FF", "r2": 0.117, "n_months": 24, "alpha_annual": 0.406, "note": "US_FF5失效；CN_FF R²=0.945 Beta_mkt=1.79(t=11.0)大科技/创业板" }
+    }
+  },
+  "condition_adjustment": {
+    "applied": false,
+    "rule": "HSTECH非对称暴露修正 - 513130已清仓",
+    "adjustment": 0,
+    "reason": "513130已清仓，不再适用压力市场暴露修正。当前VIX 16.7<25非压力市场"
+  },
+  "composite": { "value": 3.08 },
+  "assessment": "L2风格评分3.08中性偏弱。动量因子4.0显著领涨，但价值(2.75)、盈利(2.75)被QQQ的显著偏成长/低盈利暴露拖累。五大因子变动不大，不成熟的FF5信号使大部分ETF回到中性3。风格偏向『动量驱动+成长偏贵』组合（动量>4.0+价值<3.0），接近成长牛后期特征但尚未达到触发条件（成长需>4.0）"
+}

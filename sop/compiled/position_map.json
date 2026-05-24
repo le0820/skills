@@ -1,0 +1,43 @@
+{
+  "_description": "Score → Position Mapping — compiled from README.md §1 + 评分可解释性手册 §四. Maps composite score to position band, stance, and recommended allocation.",
+  "_version": "compiled-2026-05-24",
+  "bands": [
+    { "score_min": 1.0, "score_max": 1.5, "position_min": 0, "position_max": 10, "central": 10, "stance": "极端防御", "note": "现金为王" },
+    { "score_min": 1.5, "score_max": 2.0, "position_min": 10, "position_max": 20, "central": 20, "stance": "防御", "note": "" },
+    { "score_min": 2.0, "score_max": 2.5, "position_min": 20, "position_max": 35, "central": 35, "stance": "偏防御", "note": "" },
+    { "score_min": 2.5, "score_max": 3.0, "position_min": 35, "position_max": 50, "central": 45, "stance": "中性偏保守", "note": "防御为主" },
+    { "score_min": 3.0, "score_max": 3.5, "position_min": 50, "position_max": 60, "central": 55, "stance": "中性偏进攻", "note": "均衡" },
+    { "score_min": 3.5, "score_max": 4.0, "position_min": 60, "position_max": 70, "central": 70, "stance": "进攻", "note": "" },
+    { "score_min": 4.0, "score_max": 5.0, "position_min": 70, "position_max": 85, "central": 85, "stance": "积极进攻", "note": "仓位上限85%(安全边际)" }
+  ],
+  "us_cn_allocation_guidelines": {
+    "current_default": { "us_pct": 55, "cn_pct": 45, "note": "CN估值低+政策空间大对冲US高估值" },
+    "scenarios": [
+      { "condition": "US CPI < 3.5%", "us_pct": 60, "cn_pct": 40, "note": "Fed暂停 → US成长股受益" },
+      { "condition": "CN 零售 > 3%", "us_pct": 45, "cn_pct": 55, "note": "中国内需复苏确认 → 加仓中国" },
+      { "condition": "中东升级", "us_pct": 65, "cn_pct": 35, "note": "避险 → 减仓新兴市场" }
+    ]
+  },
+  "hstech_quadrant_position_limits": {
+    "_source": "三层多因子投研框架 v1.4 §四情景象限",
+    "US_UP_CN_UP": { "max_position": 15, "action": "可小幅加仓" },
+    "US_UP_CN_DOWN": { "max_position": 10, "action": "只减不增，优先减持" },
+    "US_DOWN_CN_UP": { "max_position": 12, "action": "观察CN独立行情持续性" },
+    "US_DOWN_CN_DOWN": { "max_position": 5, "action": "降至观察仓或清仓" }
+  },
+  "hard_limits": {
+    "max_total_exposure": 85,
+    "drawdown_review": 10,
+    "drawdown_trading_halt": 15,
+    "single_asset_max_no_leverage": "不超过总仓位内配比的2倍"
+  },
+  "scenario_probability_weights": {
+    "_source": "三层多因子投研框架 §当前综合判断 (2026-05-08 snapshot)",
+    "_note": "Historical example — update weekly",
+    "cpi_mild_ai_beat": { "probability": 0.30, "position_adjustment": "+10%", "target": "65-70%" },
+    "cpi_high_fed_hawk": { "probability": 0.20, "position_adjustment": "-15%", "target": "40-45%" },
+    "soft_landing": { "probability": 0.30, "position_adjustment": "maintain", "target": "55-60%" },
+    "cn_consumption_recovery": { "probability": 0.10, "position_adjustment": "CN +10%", "target": "" },
+    "black_swan": { "probability": 0.10, "position_adjustment": "-25%", "target": "30-35%" }
+  }
+}

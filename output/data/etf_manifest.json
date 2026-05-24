@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-05-24T05:53:34.501713Z",
+  "days": 500,
+  "etfs": {
+    "513130.SH": {
+      "name": "恒生科技ETF",
+      "path": "/tmp/513130_SH_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    },
+    "513310.SH": {
+      "name": "中韩半导体ETF",
+      "path": "/tmp/513310_SH_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    },
+    "159682.SZ": {
+      "name": "创业板50ETF",
+      "path": "/tmp/159682_SZ_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    },
+    "QQQ.US": {
+      "name": "纳斯达克100ETF",
+      "path": "/tmp/QQQ_US_daily.csv",
+      "rows": 500,
+      "date_range": "2024-05-24 ~ 2026-05-22"
+    },
+    "159632.SZ": {
+      "name": "纳斯达克ETF(华安)",
+      "path": "/tmp/159632_SZ_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    }
+  },
+  "indexes": {
+    "000985.SH": {
+      "name": "中证全指",
+      "path": "/tmp/000985_SH_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    },
+    "000852.SH": {
+      "name": "中证1000",
+      "path": "/tmp/000852_SH_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    },
+    "000903.SH": {
+      "name": "中证100",
+      "path": "/tmp/000903_SH_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    },
+    "399371.SZ": {
+      "name": "国证价值",
+      "path": "/tmp/399371_SZ_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    },
+    "399370.SZ": {
+      "name": "国证成长",
+      "path": "/tmp/399370_SZ_daily.csv",
+      "rows": 500,
+      "date_range": "2024-04-26 ~ 2026-05-22"
+    }
+  }
+}

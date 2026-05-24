@@ -1,0 +1,102 @@
+{
+  "timestamp": "2026-05-24T05:53:32Z",
+  "framework_version": "四层多因子框架 v1.6 + 评分可解释性手册 v1.1",
+  "reference_scores": [
+    { "layer": "L1", "score_file": "output/data/scores_L1_20260524.json", "score": 2.96 },
+    { "layer": "L2", "score_file": "output/data/scores_L2_20260524.json", "score": 3.08 },
+    { "layer": "L3", "score_file": "output/data/scores_L3_20260524.json", "score": 2.75 }
+  ],
+  "layer_weights": {
+    "L1": 0.40,
+    "L2": 0.30,
+    "L3": 0.30,
+    "calibration_note": "Default weights per weight_matrix.json v1.1 current"
+  },
+  "layers": {
+    "L1": { "score": 2.96, "brief": "宏观弱于中性。US端(3.20)就业+金融条件支撑对冲通胀粘性；CN端(2.60)消费停滞+制造临界定" },
+    "L2": { "score": 3.08, "style_bias": "momentum_driven", "brief": "动量4.0领跑但价值/盈利被QQQ偏成长拖累。整体风格中性偏动量" },
+    "L3": { "score": 2.75, "mood": "risk_off", "brief": "情绪偏弱(AAII散户悲观)、风险中性(持有组合风险可控)" }
+  },
+  "composite": {
+    "value": 2.93,
+    "formula": "2.96(L1)×0.40 + 3.08(L2)×0.30 + 2.75(L3)×0.30 = 1.184 + 0.924 + 0.825 = 2.93",
+    "previous": 3.14,
+    "change": -0.21
+  },
+  "position": {
+    "band": {
+      "score_range": "2.5-3.0",
+      "position_range": "35-50%",
+      "position_median": 45,
+      "stance": "中性偏保守"
+    },
+    "per_asset_allocation": [
+      {
+        "ticker": "159682.SZ",
+        "name": "创业板50ETF景顺",
+        "role": "attack",
+        "max_weight": 25,
+        "buy_trigger": "CN PMI回升>51或创业板→60日线支撑",
+        "sell_trigger": "159682周跌>10%或CN L1<2.0",
+        "current_weight": 40,
+        "action": "reduce"
+      },
+      {
+        "ticker": "159632.SZ",
+        "name": "纳斯达克ETF华安",
+        "role": "attack",
+        "max_weight": 15,
+        "buy_trigger": "NVDA财报确认capex(已触发)、30Y<4.7%",
+        "sell_trigger": "QQQ回撤>10%或溢价>5%",
+        "current_weight": 15.7,
+        "action": "hold"
+      },
+      {
+        "ticker": "黄金ETF",
+        "name": "博时黄金ETF联接C",
+        "role": "defense",
+        "max_weight": 15,
+        "buy_trigger": "30Y突破5.5%或地缘升级或VIX>28",
+        "sell_trigger": "DXY大幅走强>102或Fed意外转鸽",
+        "current_weight": 0,
+        "action": "avoid"
+      },
+      {
+        "ticker": "红利低波",
+        "name": "南方红利低波50ETF联接A",
+        "role": "defense",
+        "max_weight": 15,
+        "buy_trigger": "CN L1<2.3或创业板大幅回调",
+        "sell_trigger": "CN消费回升>5%",
+        "current_weight": 0,
+        "action": "avoid"
+      },
+      {
+        "ticker": "USDT",
+        "name": "稳定币/现金",
+        "role": "cash",
+        "max_weight": 50,
+        "buy_trigger": "维持现金仓位",
+        "sell_trigger": "L1显著改善或黑天鹅抛售",
+        "current_weight": 44.3,
+        "action": "hold"
+      }
+    ],
+    "hard_limits": {
+      "max_total_exposure_pct": 85,
+      "drawdown_alert_10pct": false,
+      "drawdown_emergency_15pct": false,
+      "consecutive_loss_stop": 3
+    }
+  },
+  "assessment": "综合评分2.93，较上周3.14下降0.21，落入2.5-3.0中性偏保守区间。核心矛盾维持：NVDA强劲增长(AI capex→159682+159632受益) vs 宏观约束(通胀粘性+30Y>5%+油价$104)。建议从55%仓位中枢降至45%，减仓159682至25%上限（现40%过高），159632保持15%持有，保留45%现金待PCE数据明确方向。5/28 PCE及GDP修正为关键枢轴。30Y 5.07%仍在🔴警戒区间，但已从5.19%回落属边际改善。",
+  "scenario_analysis": {
+    "upside_scenario": "5/28 PCE<3.2% → 通胀拐点确认 → 30Y快速下破4.7% → 升级至中性偏进攻(3.0-3.5)加仓至55%",
+    "downside_scenario": "5/28 PCE>3.7% → 通胀加速 → 30Y重破5.2% → Warsh加息概率提升 → 降至偏防御(2.0-2.5)减仓至35%以下",
+    "next_key_data": {
+      "date": "2026-05-28",
+      "event": "4月PCE + Q1 GDP修正",
+      "impact": "critical"
+    }
+  }
+}

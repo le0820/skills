@@ -1,0 +1,66 @@
+{
+  "_description": "Monitoring Trigger Conditions — compiled from README.md §3 + 交易执行系统 SOP. 15 trigger conditions with thresholds, alert levels, and push throttling rules.",
+  "_version": "compiled-2026-05-24",
+  "_source": "README.md §3 (Monitoring Layer)",
+  "triggers": [
+    { "id": 1, "label": "30Y UST", "metric": "ust_30y", "level": "red", "condition": "> 5.0%", "operator": "above",
+      "action": "大幅减仓高久期资产, 增配短债/现金", "deterioration_check": false },
+    { "id": 2, "label": "VIX", "metric": "vix", "level": "red", "condition": "> 28 且 单日涨幅>30%", "operator": "above_and_surge",
+      "action": "立即减仓50%+, 启动对冲", "deterioration_check": false },
+    { "id": 3, "label": "总账户回撤", "metric": "total_account_drawdown", "level": "red", "condition": "> 10%", "operator": "above",
+      "action": "紧急审查, 暂停新增仓位", "deterioration_check": true,
+      "note": "回撤>15% → 暂停交易（系统硬止损）" },
+    { "id": 4, "label": "布伦特周涨", "metric": "brent_wow", "level": "orange", "condition": "> 15%", "operator": "above",
+      "action": "评估油价→通胀传导 → 减仓高久期成长股", "deterioration_check": false },
+    { "id": 5, "label": "SPX破MA200", "metric": "spx_ma200", "level": "orange", "condition": "收盘跌破 MA200 且 斜率转负", "operator": "below_with_slope",
+      "action": "技术面趋势转空, 减仓美股", "deterioration_check": false },
+    { "id": 6, "label": "10Y-2Y倒挂", "metric": "ust_2y10y_spread", "level": "orange", "condition": "重新倒挂(spread<0)", "operator": "below",
+      "action": "衰退预警信号, 降低风险暴露", "deterioration_check": false },
+    { "id": 7, "label": "CN PMI", "metric": "pmi_mfg", "level": "orange", "condition": "连续两月 < 49", "operator": "below_consecutive",
+      "action": "中国经济失速, 减仓CN暴露资产", "deterioration_check": false },
+    { "id": 8, "label": "159632溢价", "metric": "159632_premium", "level": "yellow", "condition": "> 10%", "operator": "above",
+      "action": "溢价过高, 不追买 → 等待回落", "deterioration_check": false },
+    { "id": 9, "label": "中美利差", "metric": "cn_us_spread", "level": "yellow", "condition": "> 300bp (绝对值)", "operator": "above",
+      "action": "人民币贬值压力, CN资产估值折价加大", "deterioration_check": false },
+    { "id": 10, "label": "VIX自满", "metric": "vix", "level": "blue", "condition": "< 12", "operator": "below",
+      "action": "市场过度自满, 收紧止损, 考虑对冲", "deterioration_check": false },
+    { "id": 11, "label": "159682周跌", "metric": "159682_weekly_return", "level": "yellow", "condition": "> 10% (周跌幅)", "operator": "below",
+      "action": "创业板异常下跌, 排查原因", "deterioration_check": false },
+    { "id": 12, "label": "QQQ回撤-10%", "metric": "qqq_drawdown", "level": "orange", "condition": "从高点回撤 ≥ 10%", "operator": "below",
+      "action": "美股技术性调整, 开始减仓", "deterioration_check": true },
+    { "id": 13, "label": "QQQ回撤-15%", "metric": "qqq_drawdown", "level": "red", "condition": "从高点回撤 ≥ 15%", "operator": "below",
+      "action": "美股深度调整, 大幅减仓, 考虑对冲", "deterioration_check": true,
+      "note": "与#12联动：先触发#12(-10%)再触发#13(-15%)时恶化加剧" },
+    { "id": 14, "label": "CPI+30Y机会", "metric": "cpi_and_30y", "level": "green", "condition": "CPI < 3.5% 且 30Y < 4.7%", "operator": "below",
+      "action": "通胀可控+长端利率下行 → 加仓成长股窗口", "deterioration_check": false },
+    { "id": 15, "label": "159632溢价率", "metric": "159632_premium", "level": "yellow", "condition": "> 5%（不买）", "operator": "above",
+      "action": "停止买入159632, 已有仓位考虑减仓", "deterioration_check": false }
+  ],
+  "level_color_map": {
+    "red": { "label": "行动", "emoji": "🔴", "active_pushes": ["all_time_slots", "weekend_override"] },
+    "orange": { "label": "准备", "emoji": "🟠", "active_pushes": ["all_time_slots"] },
+    "yellow": { "label": "关注", "emoji": "🟡", "active_pushes": ["business_hours_only"], "max_daily": 1 },
+    "blue": { "label": "信息", "emoji": "🔵", "active_pushes": ["business_hours_only"] },
+    "green": { "label": "机会", "emoji": "🟢", "active_pushes": ["business_hours_only"] }
+  },
+  "push_throttling": {
+    "same_trigger_24h": "禁止重复推送, 除非恶化 > 20%",
+    "yellow_max_daily": "黄色预警每日最多1条",
+    "no_actionless_push": "禁止推送不含建议操作的预警",
+    "time_slot_rules": {
+      "pre_open_0900": "全量快速扫描(触发1-16)",
+      "intraday_0930_1500": "每30min交替扫描分组, 仅🔴🟠可推送",
+      "after_hours_1500_2100": "仅🔴活跃触发可推送",
+      "us_open_2100": "全量快速扫描",
+      "us_hours_2100_2300": "仅🔴活跃触发可推送",
+      "night_2300_0900": "仅 Tier1 新增触发可推送",
+      "weekend": "仅🔴活跃触发复查"
+    }
+  },
+  "hard_stops": {
+    "drawdown_10pct": "紧急审查, 暂停新增仓位",
+    "drawdown_15pct": "暂停交易, 全面审查",
+    "consecutive_losses": "连续止损触发后, 暂停交易24h反省"
+  },
+  "_extensible": "id 16-20 reserved for system health triggers (worker timeout, API failure, disk full, etc.)"
+}

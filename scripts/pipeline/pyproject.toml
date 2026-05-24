@@ -1,0 +1,8 @@
+[project]
+name = "investment-pipeline"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "akshare>=1.14.0",
+    "pandas>=2.0",
+]

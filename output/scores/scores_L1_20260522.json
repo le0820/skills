@@ -1,0 +1,306 @@
+{
+  "timestamp": "2026-05-24T05:24:27Z",
+  "framework_version": "三层多因子投研框架 v1.4 + 中国宏观因子框架 v1.0",
+  "us": {
+    "factors": [
+      {
+        "name": "employment_growth",
+        "label": "就业/增长",
+        "weight": 0.2,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "nonfarm_payroll": {
+              "value": null,
+              "unit": "K",
+              "reference": "无最新数据"
+            },
+            "unemployment_rate": {
+              "value": null,
+              "unit": "%",
+              "reference": "无最新数据"
+            },
+            "gdp_growth": {
+              "value": null,
+              "unit": "%",
+              "reference": "无最新数据"
+            }
+          },
+          "data_source": "BLS (无数据)"
+        },
+        "scoring_method": "无数据→中性3",
+        "rationale": "4月非农数据未获取，标记为中性。FOMC纪要提及外需强劲+内需温和，但无量化数据支撑评分偏差。"
+      },
+      {
+        "name": "inflation_wages",
+        "label": "通胀/工资",
+        "weight": 0.2,
+        "score": 2,
+        "data": {
+          "indicators": {
+            "cpi_yoy": {
+              "value": 3.8,
+              "unit": "%",
+              "reference": "4月YoY, 前值3.3%"
+            },
+            "core_pce_yoy": {
+              "value": 3.2,
+              "unit": "%",
+              "reference": "3月数据, 前值3.0%"
+            },
+            "brent_price": {
+              "value": 104.25,
+              "unit": "USD/bbl",
+              "reference": "5/22收盘"
+            }
+          },
+          "data_source": "BLS CPI + TradingEconomics + MarketWatch"
+        },
+        "scoring_method": "CPI 3-4% 但 油价>$90扣1",
+        "rationale": "CPI 3.8%在3-4%区间，但布伦特$104>$90触发扣分。核心PCE 3.2%也偏高。油价冲击+关税传导使通胀粘性确认。"
+      },
+      {
+        "name": "monetary_policy",
+        "label": "货币政策",
+        "weight": 0.2,
+        "score": 2,
+        "data": {
+          "indicators": {
+            "fed_rate": {
+              "value": 3.625,
+              "unit": "%",
+              "reference": "联邦基金利率3.50-3.75%"
+            },
+            "fed_stance": {
+              "value": "中性偏鹰",
+              "unit": "",
+              "reference": "4月FOMC纪要, 约30%概率2027年前加息"
+            }
+          },
+          "data_source": "Reuters + Fed FOMC声明"
+        },
+        "scoring_method": "利率不变但有加息风险",
+        "rationale": "Warsh新上任面临通胀粘性+油价冲击双重约束。FOMC纪要确认通胀粘性，市场开始定价加息。虽未实质加息但加息风险显著上升。"
+      },
+      {
+        "name": "financial_conditions",
+        "label": "金融条件",
+        "weight": 0.2,
+        "score": 4,
+        "data": {
+          "indicators": {
+            "vix": {
+              "value": 17.44,
+              "unit": "",
+              "reference": "5/20收盘, 正常区间"
+            },
+            "spx_level": {
+              "value": 7473.47,
+              "unit": "",
+              "reference": "5/22收盘, 接近历史高位"
+            },
+            "dxy": {
+              "value": 99.24,
+              "unit": "",
+              "reference": "走弱, 5/22收盘"
+            },
+            "credit_spread_ig": {
+              "value": null,
+              "unit": "",
+              "reference": "无数据"
+            }
+          },
+          "data_source": "WSJ + TradingEconomics + StreetStats"
+        },
+        "scoring_method": "VIX 15-18 + 股指健康 + 美元走弱",
+        "rationale": "VIX 17.44正常, SPX接近历史高点(7,473), DXY 99.24走弱有利于新兴市场。美股连续周线收阳。信用利差无数据但市场整体无冻结迹象。"
+      },
+      {
+        "name": "geopolitical_risk",
+        "label": "地缘冲击",
+        "weight": 0.2,
+        "score": 2,
+        "data": {
+          "indicators": {
+            "iran_conflict": {
+              "value": "中东冲突持续",
+              "unit": "",
+              "reference": "美以-伊朗冲突"
+            },
+            "tariff_uncertainty": {
+              "value": "高",
+              "unit": "",
+              "reference": "关税政策不确定性"
+            },
+            "sanctions": {
+              "value": "扩大中",
+              "unit": "",
+              "reference": ""
+            }
+          },
+          "data_source": "Fortune + Reuters"
+        },
+        "scoring_method": "区域冲突+关税扩大, 间接经济影响",
+        "rationale": "美以-伊朗冲突持续影响油价, 关税政策扩大。但中东停火谈判在推进(部分缓解)。整体地缘风险溢价仍高。"
+      }
+    ],
+    "composite": 2.6
+  },
+  "cn": {
+    "factors": [
+      {
+        "name": "manufacturing",
+        "label": "制造业",
+        "weight": 0.25,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "pmi_mfg": {
+              "value": 50.3,
+              "unit": "",
+              "reference": "NBS April, 前值50.5"
+            },
+            "caixin_pmi": {
+              "value": 52.2,
+              "unit": "",
+              "reference": "Caixin April, 5年新高"
+            },
+            "exports_yoy": {
+              "value": null,
+              "unit": "%",
+              "reference": "无数据"
+            }
+          },
+          "data_source": "FocusEconomics + CNBC"
+        },
+        "scoring_method": "NBS PMI 50-51中性偏弱 → Score 3, 缺出口数据确认",
+        "rationale": "NBS PMI 50.3勉强扩张, Caixin PMI 52.2显示中小制造强劲, 结构分化。出口数据缺, 无法确认外需强度。高技术制造PMI > 整体为结构性亮点。"
+      },
+      {
+        "name": "consumption",
+        "label": "消费/内需",
+        "weight": 0.2,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "retail_sales_yoy": {
+              "value": null,
+              "unit": "%",
+              "reference": "无数据"
+            },
+            "cpi_yoy": {
+              "value": 1.2,
+              "unit": "%",
+              "reference": "NBS April, 前值0.9%"
+            },
+            "pmi_non_mfg": {
+              "value": null,
+              "unit": "",
+              "reference": "无数据"
+            }
+          },
+          "data_source": "IndexBox.io (CPI)"
+        },
+        "scoring_method": "无数据→中性3，CPI回升至1.2%偏正面",
+        "rationale": "CPI回升至1.2%高于预期，但缺乏零售销售和非制造PMI数据判断消费强度。CPI回升是正面信号但不足以给高分。"
+      },
+      {
+        "name": "credit",
+        "label": "信贷/流动性",
+        "weight": 0.2,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "tsf_yoy": {
+              "value": null,
+              "unit": "%",
+              "reference": "无数据"
+            },
+            "m2_yoy": {
+              "value": null,
+              "unit": "%",
+              "reference": "无数据"
+            },
+            "m1_yoy": {
+              "value": null,
+              "unit": "%",
+              "reference": "无数据"
+            },
+            "lpr_1y": {
+              "value": null,
+              "unit": "%",
+              "reference": "无数据"
+            }
+          },
+          "data_source": "无"
+        },
+        "scoring_method": "无数据→中性3",
+        "rationale": "所有信贷相关指标(TFS/M2/M1/LPR)均未获取到最新数据。"
+      },
+      {
+        "name": "real_estate",
+        "label": "房地产",
+        "weight": 0.15,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "new_home_price_yoy": {
+              "value": null,
+              "unit": "%",
+              "reference": "无数据"
+            },
+            "second_hand_price_yoy": {
+              "value": null,
+              "unit": "%",
+              "reference": "无数据"
+            }
+          },
+          "data_source": "无"
+        },
+        "scoring_method": "无数据→中性3",
+        "rationale": "最新70城房价数据未获取。"
+      },
+      {
+        "name": "policy",
+        "label": "政策/外部",
+        "weight": 0.2,
+        "score": 3,
+        "data": {
+          "indicators": {
+            "lpr_change": {
+              "value": null,
+              "unit": "bp",
+              "reference": "无数据"
+            },
+            "fiscal_stance": {
+              "value": "温和宽松",
+              "unit": "",
+              "reference": "定性判断"
+            },
+            "tariff_status": {
+              "value": "紧张",
+              "unit": "",
+              "reference": "中美关税持续"
+            }
+          },
+          "data_source": "公开发布信息"
+        },
+        "scoring_method": "定性判断→中性3",
+        "rationale": "PBOC保持温和宽松基调但无重大新措施。外部关税环境紧张但无突变。"
+      }
+    ],
+    "composite": 3.0
+  },
+  "composite": {
+    "value": 2.76,
+    "weights": {
+      "us": 0.6,
+      "cn": 0.4
+    }
+  },
+  "assessment": "US宏观偏弱(2.60): 通胀粘性(CPI3.8%+核心PCE3.2%)+布伦特$104制约政策空间,Warsh面临加息压力。金融条件尚可(VIX正常+SPX新高+DXY走弱)。CN宏观中性(3.00): PMI结构分化,CPI温和回升,但数据不全信贷/地产无法评估。L1综合2.76=US偏弱+CN中性,宏观压力偏大。金油比43.4>25触发矛盾信号预警。",
+  "jp_reference": {
+    "score": 1.9,
+    "note": "JGB 10Y 2.77%(>1.5%→1分), USDJPY 159(接近危机边缘→2分), 增长数据缺→3分。JP-L1整体偏紧。"
+  }
+}

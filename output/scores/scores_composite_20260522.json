@@ -1,0 +1,121 @@
+{
+  "timestamp": "2026-05-24T05:24:27Z",
+  "framework_version": "三层多因子投研框架 v1.4 + 评分可解释性手册 v1.1",
+  "reference_scores": [
+    {
+      "layer": "L1",
+      "score": 2.76,
+      "score_file": "scores_L1_20260522.json"
+    },
+    {
+      "layer": "L2",
+      "score": 3.4,
+      "score_file": "scores_L2_20260522.json"
+    },
+    {
+      "layer": "L3",
+      "score": 3.38,
+      "score_file": "scores_L3_20260522.json"
+    }
+  ],
+  "layer_weights": {
+    "L1": 0.4,
+    "L2": 0.3,
+    "L3": 0.3
+  },
+  "layers": {
+    "L1": {
+      "score": 2.76,
+      "brief": "US偏弱(2.60)通胀粘性+油价制约, CN中性(3.00)数据不全"
+    },
+    "L2": {
+      "score": 3.4,
+      "style_bias": "momentum_driven",
+      "brief": "强动量(4)+强成长(NVDA驱动), 价值/盈利/规模中性"
+    },
+    "L3": {
+      "score": 3.38,
+      "mood": "neutral",
+      "brief": "情绪中性, 风险偏优, VaR趋势分化"
+    }
+  },
+  "composite": {
+    "value": 3.14,
+    "formula": "2.76×0.40 + 3.4×0.30 + 3.38×0.30 = 3.14",
+    "previous": 3.2,
+    "change": -0.06
+  },
+  "position": {
+    "band": {
+      "score_range": "3.0-3.5",
+      "position_range": "50-60%",
+      "position_median": 55,
+      "stance": "中性偏进攻"
+    },
+    "per_asset_allocation": [
+      {
+        "ticker": "159682",
+        "name": "创业板50ETF景顺",
+        "role": "attack",
+        "max_weight": 40,
+        "buy_trigger": "L1综合改善/全球AI周期延续",
+        "sell_trigger": "159682周跌>10%或CN-L1<2.0",
+        "current_weight": 40,
+        "action": "hold"
+      },
+      {
+        "ticker": "159632",
+        "name": "纳斯达克ETF华安",
+        "role": "attack",
+        "max_weight": 25,
+        "buy_trigger": "溢价率<3%且L1 US改善",
+        "sell_trigger": "QQQ回撤>10%或溢价>5%",
+        "current_weight": 15.7,
+        "action": "hold"
+      },
+      {
+        "ticker": "黄金ETF",
+        "name": "博时黄金ETF联接C",
+        "role": "defense",
+        "max_weight": 15,
+        "buy_trigger": "DXY>103或地缘升级",
+        "sell_trigger": "无(已清仓)",
+        "current_weight": 0,
+        "action": "avoid"
+      },
+      {
+        "ticker": "红利低波",
+        "name": "南方红利低波50ETF联接A",
+        "role": "defense",
+        "max_weight": 15,
+        "buy_trigger": "CN-L1<2.0且L2价值>4.0",
+        "sell_trigger": "无(已清仓)",
+        "current_weight": 0,
+        "action": "avoid"
+      },
+      {
+        "ticker": "现金",
+        "name": "现金/USDT理财",
+        "role": "cash",
+        "max_weight": 45,
+        "current_weight": 44.3,
+        "action": "hold"
+      }
+    ],
+    "hard_limits": {
+      "max_total_exposure_pct": 85,
+      "drawdown_alert_10pct": false,
+      "drawdown_emergency_15pct": false
+    }
+  },
+  "assessment": "综合评分3.14 (前值3.20, -0.06)。整体中性偏进攻(仓位中枢55%)。核心矛盾: NVDA强劲增长数据推高L2动量/成长因子 vs 宏观约束(通胀粘性CPI3.8%+布伦特$104+Warsh加息压力)压制L1。当前仓位55.7%与中枢吻合。关键风险: 金油比43.4>25触发矛盾预警; 30Y~5.07%仍高; PCE 5/28公布是关键枢轴。",
+  "scenario_analysis": {
+    "upside_scenario": "PCE<3.2%+中东停火落实→油价回落→Fed加息预期消退→L1改善至3.0+, 仓位可升至60-65%",
+    "downside_scenario": "PCE>3.7%+油价维持$105+→Fed加息风险兑现→L1 US降至2.0-, 仓位降至35-45%",
+    "next_key_data": {
+      "date": "2026-05-28",
+      "event": "4月PCE+Q1 GDP修正",
+      "impact": "决定Fed H2路径的关键数据点"
+    }
+  }
+}

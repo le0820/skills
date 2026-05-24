@@ -1,0 +1,152 @@
+{
+  "timestamp": "2026-05-24T05:24:27Z",
+  "framework_version": "三层多因子投研框架 v1.4 + 评分可解释性手册 v1.1",
+  "etf_universe": [
+    "159682.SZ",
+    "159632.SZ",
+    "QQQ.US"
+  ],
+  "factors": [
+    {
+      "name": "momentum",
+      "label": "动量(12-1月)",
+      "weight": 0.2,
+      "score": 4,
+      "per_asset": {
+        "159682.SZ": {
+          "raw_value": 105.66,
+          "score": 5,
+          "rationale": "12-1月动量+105.66%, >+50%→5分"
+        },
+        "159632.SZ": {
+          "raw_value": 29.39,
+          "score": 4,
+          "rationale": "12-1月动量+29.39%, +20~50%→4分"
+        },
+        "QQQ.US": {
+          "raw_value": 29.95,
+          "score": 4,
+          "rationale": "12-1月动量+29.95%, +20~50%→4分"
+        }
+      },
+      "scoring_method": "12月收益-1月收益映射, 等权平均",
+      "sub_indicators": {
+        "ma20_breadth": {
+          "value": "3/3",
+          "score": 5,
+          "note": "全部站上MA20"
+        },
+        "roc_20d": {
+          "value": "全部正",
+          "score": 5,
+          "note": "159SZ+7.78% 159632+11.79% QQQ+10.15%"
+        }
+      }
+    },
+    {
+      "name": "value",
+      "label": "价值(HML)",
+      "weight": 0.2,
+      "score": 3,
+      "per_asset": {
+        "159682.SZ": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        },
+        "159632.SZ": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        },
+        "QQQ.US": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        }
+      },
+      "scoring_method": "无FF5回归→默认中性3",
+      "macro_valuation_indicators": {
+        "note": "S&P 500 TTM PE未获取, 整体估值偏高。NVDA营收beat但估值已高。"
+      }
+    },
+    {
+      "name": "growth",
+      "label": "成长(RMW+CMA反)",
+      "weight": 0.2,
+      "score": 4,
+      "per_asset": {
+        "159682.SZ": {
+          "score": 4,
+          "rationale": "创业板50含宁德/中际/新易盛等AI+新能源高成长标的"
+        },
+        "159632.SZ": {
+          "score": 4,
+          "rationale": "纳指ETF含NVDA/MSFT等Big Tech, NVDA Q1营收$81.6B beat"
+        },
+        "QQQ.US": {
+          "score": 4,
+          "rationale": "NVDA财报超预期+AI capex超级周期确认"
+        }
+      },
+      "scoring_method": "定性判断, 基于NVDA财报+AI capex趋势",
+      "macro_growth_indicators": {
+        "nvda_q1_fy27": "营收$81.6B(beat共识$78B), DC $75.2B纪录, Q2指引$91B(远超$85-87B共识)",
+        "ai_capex_growth": ">30% → 5分",
+        "note": "FF5回归未跑, 使用定性判断替代"
+      }
+    },
+    {
+      "name": "profitability",
+      "label": "盈利(RMW)",
+      "weight": 0.2,
+      "score": 3,
+      "per_asset": {
+        "159682.SZ": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        },
+        "159632.SZ": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        },
+        "QQQ.US": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        }
+      },
+      "scoring_method": "无FF5回归→默认中性3"
+    },
+    {
+      "name": "size",
+      "label": "规模(SMB)",
+      "weight": 0.2,
+      "score": 3,
+      "per_asset": {
+        "159682.SZ": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        },
+        "159632.SZ": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        },
+        "QQQ.US": {
+          "score": 3,
+          "rationale": "无FF5回归数据→中性3"
+        }
+      },
+      "scoring_method": "无FF5回归→默认中性3"
+    }
+  ],
+  "ff5_regression": {
+    "method": "未跑回归(数据源限制)",
+    "etf_assignments": {},
+    "note": "FF5回归需Phase 1.1脚本生成日线后运行p1_upgrade.py。本次未运行。"
+  },
+  "condition_adjustment": {
+    "applied": false,
+    "note": "不涉及HSTECH非对称暴露修正(513130已清仓)"
+  },
+  "composite": {
+    "value": 3.4
+  },
+  "assessment": "L2 3.40: 动量极强(4分)是所有ETF 12月收益靓丽+NVDA驱动+全部站上MA20。成长因子基于NVDA财报确认AI超级周期延续给4分。价值/盈利/规模三因子因无FF5回归数据取中性3。风格特征: 强动量+高成长, 接近成长牛市中后期特征(动量>4.0+价值<2.0+成长>4.0的极端程度尚未触发)。"
+}

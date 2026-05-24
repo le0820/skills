@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/_index.json",
+  "title": "Schema Registry",
+  "description": "Registry of all data schemas in the system. Each schema file validates one type of data exchange.",
+  "schemas": {
+    "raw_macro": {
+      "file": "raw_macro.schema.json",
+      "description": "Input — Macroeconomic indicators (US/CN/JP/Commodity) with data source annotations",
+      "direction": "input",
+      "producer": "data_fetch",
+      "consumer": ["L1_scoring", "alert_evaluation"]
+    },
+    "raw_market": {
+      "file": "raw_market.schema.json",
+      "description": "Input — ETF market data: prices, technicals, valuation, flows, momentum",
+      "direction": "input",
+      "producer": "data_fetch",
+      "consumer": ["L2_scoring", "L3_scoring", "alert_evaluation"]
+    },
+    "scores_L1": {
+      "file": "scores_L1.schema.json",
+      "description": "Output — L1 macro environment scores: US(5 factors) + CN(5 factors) → weighted composite",
+      "direction": "output",
+      "producer": "LLM_agent",
+      "consumer": ["scores_composite", "system_state", "forward_signal_log"]
+    },
+    "scores_L2": {
+      "file": "scores_L2.schema.json",
+      "description": "Output — L2 style factor scores: momentum/value/growth/profitability/size with per-ETF FF5 loadings",
+      "direction": "output",
+      "producer": "LLM_agent",
+      "consumer": ["scores_composite", "system_state"]
+    },
+    "scores_L3": {
+      "file": "scores_L3.schema.json",
+      "description": "Output — L3 market sentiment + quantitative risk scores (VaR/CVaR/drawdown)",
+      "direction": "output",
+      "producer": "compute(risk) + LLM_agent(sentiment)",
+      "consumer": ["scores_composite", "system_state"]
+    },
+    "scores_composite": {
+      "file": "scores_composite.schema.json",
+      "description": "Output — Consolidated L1×w1+L2×w2+L3×w3 → position band + per-asset allocation",
+      "direction": "output",
+      "producer": "LLM_agent",
+      "consumer": ["system_state", "forward_signal_log", "trade_execution"]
+    },
+    "alert": {
+      "file": "alert.schema.json",
+      "description": "Output — Trigger/alert event with level, throttling metadata, and actionable recommendations",
+      "direction": "output",
+      "producer": "alert_evaluation",
+      "consumer": ["system_state", "push_notification", "forward_signal_log"]
+    },
+    "system_state": {
+      "file": "system_state.schema.json",
+      "description": "Internal — System state snapshot for context recovery. Read on LLM context reset.",
+      "direction": "internal",
+      "producer": "LLM_agent (update on every scoring cycle)",
+      "consumer": ["LLM_agent (recovery)", "heartbeat_monitor"]
+    },
+    "analysis_summary": {
+      "file": "analysis_summary.schema.json",
+      "description": "Output — Compressed analysis summary (scores + conclusions + falsification, no narrative prose). Downstream agents read this instead of full markdown reports.",
+      "direction": "output",
+      "producer": "LLM_agent (after each analysis)",
+      "consumer": ["LLM_agent (cross-reference)", "scores_composite"]
+    }
+  },
+  "data_flow_order": [
+    "raw_macro, raw_market → L1 scoring → scores_L1",
+    "raw_market → L2 scoring → scores_L2",
+    "raw_market + compute → L3 scoring → scores_L3",
+    "scores_L1 + scores_L2 + scores_L3 → scores_composite",
+    "raw_macro + raw_market → alert_evaluation → alert",
+    "scores_composite + alert → system_state update",
+    "Any analysis → analysis_summary"
+  ],
+  "file_naming_convention": {
+    "raw_data": "raw_{type}_{YYYYMMDDTHHmmss}.{csv|json}",
+    "scores": "scores_{layer}_{YYYYMMDD}.json",
+    "alerts": "alert_{trigger_id}_{YYYYMMDDTHHmmss}.json",
+    "state": "system_state.json",
+    "summaries": "summary_{YYYYMMDD}.json"
+  }
+}

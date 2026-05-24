@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/scores_composite.schema.json",
+  "title": "Composite Score & Position Mapping",
+  "description": "Consolidated multi-layer scoring output. Aggregates L1, L2, L3 scores with calibrated weights and maps to position recommendation. Includes per-asset allocation guidance and risk guardrails.",
+  "type": "object",
+  "required": ["timestamp", "layer_weights", "layers", "composite", "position", "assessment"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "framework_version": {
+      "type": "string"
+    },
+    "reference_scores": {
+      "type": "array",
+      "description": "Cross-reference inputs that fed the composite. Each entry references a scores file.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "layer": { "type": "string", "enum": ["L1", "L2", "L3"] },
+          "score_file": { "type": "string", "description": "File path to the layer scores JSON" },
+          "score": { "type": "number", "minimum": 1, "maximum": 5 }
+        }
+      }
+    },
+    "layer_weights": {
+      "type": "object",
+      "description": "Calibrated weights for composite calculation",
+      "required": ["L1", "L2", "L3"],
+      "properties": {
+        "L1": { "type": "number", "description": "L1 weight (default 0.40)" },
+        "L2": { "type": "number", "description": "L2 weight (default 0.30)" },
+        "L3": { "type": "number", "description": "L3 weight (default 0.30)" },
+        "calibration_note": { "type": "string", "description": "If weights deviated from defaults, explain why" }
+      }
+    },
+    "layers": {
+      "type": "object",
+      "required": ["L1", "L2", "L3"],
+      "properties": {
+        "L1": {
+          "type": "object",
+          "properties": {
+            "score": { "type": "number" },
+            "brief": { "type": "string", "description": "One-sentence summary of L1 stance" }
+          }
+        },
+        "L2": {
+          "type": "object",
+          "properties": {
+            "score": { "type": "number" },
+            "style_bias": {
+              "type": "string",
+              "enum": ["momentum_driven", "value_oriented", "growth_oriented", "balanced", "undetermined"],
+              "description": "Dominant style direction"
+            },
+            "brief": { "type": "string" }
+          }
+        },
+        "L3": {
+          "type": "object",
+          "properties": {
+            "score": { "type": "number" },
+            "mood": {
+              "type": "string",
+              "enum": ["risk_on", "neutral", "risk_off", "extreme_fear", "complacency"],
+              "description": "Market mood classification"
+            },
+            "brief": { "type": "string" }
+          }
+        }
+      }
+    },
+    "composite": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Final composite score = L1×w1 + L2×w2 + L3×w3"
+        },
+        "formula": {
+          "type": "string",
+          "description": "Explicit calculation formula with actual values substituted"
+        },
+        "previous": {
+          "type": "number",
+          "description": "Previous composite score for tracking changes"
+        },
+        "change": {
+          "type": "number",
+          "description": "Score change from previous rating"
+        }
+      }
+    },
+    "position": {
+      "type": "object",
+      "required": ["band", "recommendation"],
+      "properties": {
+        "band": {
+          "type": "object",
+          "description": "Score → position band mapping result",
+          "properties": {
+            "score_range": { "type": "string", "description": "e.g. 3.0-3.5" },
+            "position_range": { "type": "string", "description": "e.g. 50-60%" },
+            "position_median": { "type": "number", "description": "Recommended central position (%)" },
+            "stance": {
+              "type": "string",
+              "enum": ["极端防御", "防御", "偏防御", "中性偏保守", "中性偏进攻", "进攻", "积极进攻"],
+              "description": "Position stance label"
+            }
+          }
+        },
+        "per_asset_allocation": {
+          "type": "array",
+          "description": "Recommended allocation per asset within the position band",
+          "items": {
+            "type": "object",
+            "required": ["ticker", "name", "role", "max_weight"],
+            "properties": {
+              "ticker": { "type": "string" },
+              "name": { "type": "string" },
+              "role": {
+                "type": "string",
+                "enum": ["attack", "defense", "cash"],
+                "description": "进攻/防御/现金替代"
+              },
+              "max_weight": {
+                "type": "number",
+                "description": "Maximum portfolio weight for this asset (%)"
+              },
+              "buy_trigger": {
+                "type": "string",
+                "description": "Condition to initiate/add position"
+              },
+              "sell_trigger": {
+                "type": "string",
+                "description": "Condition to reduce/exit position"
+              },
+              "current_weight": {
+                "type": "number",
+                "description": "Current portfolio weight if known"
+              },
+              "action": {
+                "type": "string",
+                "enum": ["buy", "hold", "reduce", "sell", "avoid"],
+                "description": "Current recommendation"
+              }
+            }
+          }
+        },
+        "hard_limits": {
+          "type": "object",
+          "description": "System-wide risk guardrails",
+          "properties": {
+            "max_total_exposure_pct": {
+              "type": "number",
+              "const": 85,
+              "description": "Maximum total position as percentage of capital"
+            },
+            "drawdown_alert_10pct": { "type": "boolean" },
+            "drawdown_emergency_15pct": { "type": "boolean" },
+            "consecutive_loss_stop": {
+              "type": "integer",
+              "description": "Halt trading after N consecutive losing trades"
+            }
+          }
+        }
+      }
+    },
+    "assessment": {
+      "type": "string",
+      "description": "Narrative synthesis: overall market regime, key drivers, confidence level, notable risks"
+    },
+    "scenario_analysis": {
+      "type": "object",
+      "description": "Key scenarios that could shift the composite",
+      "properties": {
+        "upside_scenario": {
+          "type": "string",
+          "description": "What would push composite higher"
+        },
+        "downside_scenario": {
+          "type": "string",
+          "description": "What would push composite lower"
+        },
+        "next_key_data": {
+          "type": "object",
+          "description": "Next data release to watch",
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "event": { "type": "string" },
+            "impact": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

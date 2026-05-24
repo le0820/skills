@@ -1,0 +1,104 @@
+{
+  "timestamp": "2026-05-24T05:53:32Z",
+  "scores": {
+    "composite": 2.93,
+    "L1": 2.96,
+    "L2": 3.08,
+    "L3": 2.75,
+    "last_updated": "2026-05-24T05:53:32Z",
+    "deterioration_alerts": [
+      {
+        "layer": "composite",
+        "previous": 3.14,
+        "current": 2.93,
+        "change": -0.21,
+        "note": "从3.0-3.5区间降至2.5-3.0区间，L2(3.08 vs 3.40)和L3(2.75 vs 3.38)双双拉低。L1改善+0.20但不足以抵消"
+      },
+      {
+        "layer": "L2",
+        "previous": 3.40,
+        "current": 3.08,
+        "change": -0.32,
+        "note": "FF5信号更保守，多数CN ETF不显著回中性3，QQQ偏成长/低盈利拖累"
+      },
+      {
+        "layer": "L3",
+        "previous": 3.38,
+        "current": 2.75,
+        "change": -0.63,
+        "note": "AAII散户情绪从乐观急转悲观(-11.9% spread)，VaR趋势QQQ扩大+7%"
+      }
+    ]
+  },
+  "position": {
+    "band_label": "中性偏保守",
+    "central_pct": 45,
+    "current_actual_pct": 55.7,
+    "per_asset": {
+      "159682.SZ": {
+        "name": "创业板50ETF景顺",
+        "weight_pct": 40.0,
+        "cost_basis": 1.686,
+        "current_price": 1.842,
+        "unrealized_pnl_pct": 9.25
+      },
+      "159632.SZ": {
+        "name": "纳斯达克ETF华安",
+        "weight_pct": 15.7,
+        "cost_basis": 2.318,
+        "current_price": 2.352,
+        "unrealized_pnl_pct": 1.47
+      }
+    }
+  },
+  "alerts": {
+    "active_count": 1,
+    "active_list": [
+      {
+        "alert_id": "trigger_1_20260524",
+        "trigger_id": 1,
+        "level": "red",
+        "since": "2026-05-19T00:00:00Z",
+        "last_push": "2026-05-24T05:53:32Z",
+        "condition": "30Y UST > 5.0%",
+        "current_value": 5.07,
+        "action": "大幅减仓高久期资产，增配短债/现金。30Y已从5.19%回落，但仍在>5%警戒"
+      }
+    ],
+    "drawdown_watch": {
+      "total_account_dd_pct": 0,
+      "alert_10pct_active": false,
+      "emergency_15pct_active": false,
+      "trading_halted": false
+    }
+  },
+  "sop_versions": {
+    "three_layer_framework": "v1.4",
+    "ai_investment_sop": "v2.0",
+    "cn_macro_framework": "v1.0",
+    "gold_framework": "v1.0",
+    "crude_oil_framework": "v1.0",
+    "crypto_framework": "v1.0",
+    "scores_explainability": "v1.1",
+    "p1_upgrade": "v1.0",
+    "analyst_workflow": "v1.0"
+  },
+  "narrative_context": "L1 2.96(改善) vs L2 3.08 + L3 2.75(偏弱) → 综合2.93中性偏保守。核心矛盾未变：NVDA AI超级周期 vs 通胀粘性+30Y>5%+油价$104。5/28 PCE关键枢轴。当前55.7%仓位高于中枢45%需减仓。",
+  "next_scheduled": {
+    "next_macro_update": "2026-05-28T00:00:00Z",
+    "next_market_scan": "2026-05-24T05:53:32Z",
+    "next_data_release": {
+      "date": "2026-05-28",
+      "event": "4月PCE + Q1 GDP修正",
+      "importance": "critical"
+    }
+  },
+  "recovery_checklist": [
+    "schemas/system_state.schema.json",
+    "sop/compiled/rules_L1.json",
+    "sop/compiled/rules_L2.json",
+    "sop/compiled/rules_L3.json",
+    "sop/compiled/weight_matrix.json",
+    "sop/compiled/triggers.json"
+  ]
+}

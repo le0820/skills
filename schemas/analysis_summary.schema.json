@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/analysis_summary.schema.json",
+  "title": "Analysis Summary (Compressed Report)",
+  "description": "Structured compression of full analysis reports. Stores only scores, key conclusions, and falsification conditions — NOT narrative prose. The full markdown report remains the authoritative source for qualitative reasoning; this is the context-efficient reference used by downstream agents.",
+  "type": "object",
+  "required": ["report_id", "timestamp", "topic", "scores", "conclusions", "falsification_conditions"],
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "description": "ID linking to the full report file",
+      "pattern": "^summary_\\d{8}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "topic": {
+      "type": "string",
+      "description": "Analysis topic/asset/instrument",
+      "examples": ["CoreWeave_Q1_2026", "CN-FF_implementation", "NVIDIA_physics_limit"]
+    },
+    "full_report_path": {
+      "type": "string",
+      "description": "Path to the full markdown report (for deep-dive context)"
+    },
+    "scores": {
+      "type": "object",
+      "description": "All numerical scores produced by this analysis. Keyed by score dimension.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "value": { "description": "The score value (can be number, string, or boolean)" },
+          "scale": {
+            "type": "string",
+            "description": "Score scale (e.g. 1-5, percentage, categorical)",
+            "examples": ["1-5", "percentage", "bullish/neutral/bearish"]
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["higher_is_better", "lower_is_better", "neutral"],
+            "description": "What the score direction means"
+          },
+          "previous": {
+            "description": "Previous score value if tracked"
+          }
+        }
+      }
+    },
+    "conclusions": {
+      "type": "array",
+      "description": "Key conclusions as structured assertions. Each one should stand alone.",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["statement", "confidence"],
+        "properties": {
+          "statement": {
+            "type": "string",
+            "description": "A single, self-contained conclusion"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low", "speculative"],
+            "description": "Confidence level in this conclusion"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["thesis", "risk", "catalyst", "valuation", "macro_link", "differentiated_insight"],
+            "description": "Type of conclusion"
+          },
+          "key_data_points": {
+            "type": "array",
+            "description": "Supporting data points",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "falsification_conditions": {
+      "type": "array",
+      "description": "Observable conditions that would invalidate each conclusion. Must have explicit numeric thresholds where possible.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["condition", "watched_metric"],
+        "properties": {
+          "watched_metric": {
+            "type": "string",
+            "description": "What to monitor"
+          },
+          "condition": {
+            "type": "string",
+            "description": "What would falsify the thesis"
+          },
+          "threshold": {
+            "description": "Numeric threshold if applicable"
+          },
+          "data_source": {
+            "type": "string",
+            "description": "Where to check this metric"
+          },
+          "check_frequency": {
+            "type": "string",
+            "description": "How often to check (daily/weekly/monthly)"
+          },
+          "action_on_trigger": {
+            "type": "string",
+            "enum": ["reassess", "reduce_position", "exit_position", "flag_for_review"]
+          }
+        }
+      }
+    },
+    "action_items": {
+      "type": "array",
+      "description": "Concrete follow-up actions derived from this analysis",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string" },
+          "priority": { "type": "string", "enum": ["now", "this_week", "this_month", "watch_only"] },
+          "deadline": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "related_analyses": {
+      "type": "array",
+      "description": "Other summary files this analysis references or builds upon",
+      "items": {
+        "type": "string",
+        "description": "Summary file ID"
+      }
+    },
+    "update_log": {
+      "type": "array",
+      "description": "When and why this summary was updated",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time" },
+          "change": { "type": "string", "description": "What changed" },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  }
+}

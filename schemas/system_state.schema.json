@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/system_state.schema.json",
+  "title": "System State Snapshot",
+  "description": "Machine-readable state snapshot for context recovery across LLM context resets. Stores the minimum viable state needed to resume operation. Replaces guideline.md prose for all quantitative/operational state. Narrative context is kept deliberately minimal.",
+  "type": "object",
+  "required": ["timestamp", "scores", "position", "alerts", "sop_versions", "next_scheduled"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last state update timestamp"
+    },
+    "scores": {
+      "type": "object",
+      "description": "Current scoring snapshot. Exact values, not prose.",
+      "required": ["composite"],
+      "properties": {
+        "composite": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Current composite score"
+        },
+        "L1": { "type": "number", "minimum": 1, "maximum": 5 },
+        "L2": { "type": "number", "minimum": 1, "maximum": 5 },
+        "L3": { "type": "number", "minimum": 1, "maximum": 5 },
+        "last_updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When scores were last updated per layer"
+        },
+        "deterioration_alerts": {
+          "type": "array",
+          "description": "Layers with score drops since last update",
+          "items": {
+            "type": "object",
+            "properties": {
+              "layer": { "type": "string" },
+              "previous": { "type": "number" },
+              "current": { "type": "number" },
+              "change": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "position": {
+      "type": "object",
+      "required": ["band_label", "central_pct"],
+      "properties": {
+        "band_label": {
+          "type": "string",
+          "examples": ["中性偏进攻"]
+        },
+        "central_pct": {
+          "type": "number",
+          "description": "Recommended central position (%)"
+        },
+        "current_actual_pct": {
+          "type": "number",
+          "description": "Currently deployed position percentage"
+        },
+        "per_asset": {
+          "type": "object",
+          "description": "Current allocation per asset (ticker → weight%)",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "weight_pct": { "type": "number" },
+              "target_weight_pct": { "type": "number" },
+              "cost_basis": { "type": "number" },
+              "unrealized_pnl_pct": { "type": "number" },
+              "stop_loss": { "type": "number", "description": "Stop loss trigger price" }
+            }
+          }
+        }
+      }
+    },
+    "alerts": {
+      "type": "object",
+      "description": "Active alerts and monitoring status",
+      "properties": {
+        "active_count": { "type": "integer" },
+        "active_list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "alert_id": { "type": "string" },
+              "trigger_id": { "type": "integer" },
+              "level": { "type": "string" },
+              "since": { "type": "string", "format": "date-time" },
+              "last_push": { "type": "string", "format": "date-time" }
+            }
+          }
+        },
+        "drawdown_watch": {
+          "type": "object",
+          "properties": {
+            "total_account_dd_pct": { "type": "number" },
+            "alert_10pct_active": { "type": "boolean" },
+            "emergency_15pct_active": { "type": "boolean" },
+            "trading_halted": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "sop_versions": {
+      "type": "object",
+      "description": "SOP framework versions in use. Critical for reproducibility — scoring depends on which version of rules was applied.",
+      "required": ["three_layer_framework", "scores_explainability"],
+      "properties": {
+        "three_layer_framework": { "type": "string", "example": "v1.4" },
+        "ai_investment_sop": { "type": "string", "example": "v2.0" },
+        "cn_macro_framework": { "type": "string" },
+        "gold_framework": { "type": "string" },
+        "crude_oil_framework": { "type": "string" },
+        "crypto_framework": { "type": "string" },
+        "scores_explainability": { "type": "string" },
+        "p1_upgrade": { "type": "string" },
+        "analyst_workflow": { "type": "string" }
+      }
+    },
+    "narrative_context": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Minimal narrative snapshot: the most important qualitative judgment in play. Max 500 chars. NOT a full report — only the dominant thesis or concern that a new context session would miss."
+    },
+    "next_scheduled": {
+      "type": "object",
+      "description": "Scheduled tasks from the monitoring time table (read-only reference — actual scheduling lives in ../HEARTBEAT.md)",
+      "properties": {
+        "next_macro_update": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Next scheduled L1 macro scoring"
+        },
+        "next_market_scan": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Next scheduled full market scan"
+        },
+        "next_data_release": {
+          "type": "object",
+          "description": "Next key economic data release",
+          "properties": {
+            "date": { "type": "string", "format": "date" },
+            "event": { "type": "string" },
+            "importance": { "type": "string", "enum": ["critical", "high", "medium"] }
+          }
+        },
+        "next_calibration": {
+          "type": "string",
+          "format": "date",
+          "description": "Next quarterly framework calibration"
+        }
+      }
+    },
+    "recovery_checklist": {
+      "type": "array",
+      "description": "Ordered list of files to load when recovering from a context reset. Machine-processable.",
+      "items": {
+        "type": "string",
+        "description": "File path relative to repo_skills root"
+      },
+      "default": [
+        "schemas/system_state.schema.json",
+        "sop/compiled/rules_L1.json",
+        "sop/compiled/rules_L2.json",
+        "sop/compiled/rules_L3.json",
+        "sop/compiled/weight_matrix.json",
+        "sop/compiled/triggers.json"
+      ]
+    }
+  }
+}

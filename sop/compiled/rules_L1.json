@@ -1,0 +1,225 @@
+{
+  "_description": "L1 Macro Environment Scoring Rules — compiled from 三层多因子投研框架 v1.4 + 中国宏观因子框架 v1.0 + 评分可解释性手册 v1.1. This file is the PRIMARY scoring reference. Load for any L1 scoring task. Full prose SOPs only for ambiguous edge cases.",
+  "_version": "compiled-2026-05-24",
+  "_source_sops": [
+    "sop/三层多因子投研框架.md (v1.4)",
+    "sop/中国宏观因子框架.md (v1.0)",
+    "sop/评分可解释性手册.md (v1.1)",
+    "README.md (v1.6 L1 section)"
+  ],
+  "_weights": {
+    "us": 0.60,
+    "cn": 0.40,
+    "jp": { "weight": 0.15, "note": "JP-L1 exists in 3-track model but currently simplified in composite" }
+  },
+  "us": {
+    "factors": [
+      {
+        "name": "employment_growth",
+        "label": "就业/增长",
+        "weight": 0.20,
+        "data_sources": ["BLS 非农就业", "BLS 失业率", "BEA GDP"],
+        "indicators": ["nonfarm_payroll", "unemployment_rate", "gdp_growth"],
+        "scoring_rules": [
+          { "score": 5, "condition": "非农 > 预期 2x 且趋势向上" },
+          { "score": 4, "condition": "非农 = 预期 1.5-2x 或 符合预期+趋势向上" },
+          { "score": 3, "condition": "非农 ≈ 预期" },
+          { "score": 2, "condition": "非农 < 预期" },
+          { "score": 1, "condition": "非农 << 预期 且趋势恶化" }
+        ],
+        "_qualitative_note": "分数有上限软约束：若近期均值偏弱（如3月均值仅48K/月），即使单月超预期也不给满分5"
+      },
+      {
+        "name": "inflation_wages",
+        "label": "通胀/工资",
+        "weight": 0.20,
+        "data_sources": ["BLS CPI", "BEA PCE", "BLS 工资增速", "EIA 布伦特油价"],
+        "indicators": ["cpi_yoy", "core_pce_yoy", "wage_growth_yoy", "brent_price"],
+        "scoring_rules": [
+          { "score": 5, "condition": "CPI≤2% + 工资>CPI 或 PCE趋势下降+油价<$75" },
+          { "score": 4, "condition": "CPI 2-3% + 实际工资为正" },
+          { "score": 3, "condition": "CPI 3-4% + 工资≈CPI" },
+          { "score": 2, "condition": "CPI>4% + 实际工资负增长 或 油价>$90扣1" },
+          { "score": 1, "condition": "CPI>5% + 工资<<CPI 或 油价>$105再扣" }
+        ],
+        "_qualitative_note": "区分通胀类型：若油价>90但PCE来自工资/住房，油价不主导通胀，评分应更关注核心PCE而非油价"
+      },
+      {
+        "name": "monetary_policy",
+        "label": "货币政策",
+        "weight": 0.20,
+        "data_sources": ["Fed FOMC声明", "Fed 点阵图", "Fed 资产负债表"],
+        "indicators": ["fed_rate", "fed_stance"],
+        "scoring_rules": [
+          { "score": 5, "condition": "明确降息周期中，点阵图指引2次以上降息" },
+          { "score": 4, "condition": "降息周期结束/暂停，预计不再加息" },
+          { "score": 3, "condition": "利率不变，点阵图中性，缩表无变化" },
+          { "score": 2, "condition": "利率不变但有加息风险（官员警告+CPI粘性）" },
+          { "score": 1, "condition": "明确加息中/加息信号，缩表加速" }
+        ]
+      },
+      {
+        "name": "financial_conditions",
+        "label": "金融条件",
+        "weight": 0.20,
+        "data_sources": ["CBOE VIX", "WSJ 标普500", "信用利差(OAS)", "DXY"],
+        "indicators": ["vix", "spx_level", "spx_ma200", "credit_spread_ig", "dxy"],
+        "scoring_rules": [
+          { "score": 5, "condition": "VIX<15 + 股指新高 + 信用利差收窄 + 美元走弱" },
+          { "score": 4, "condition": "VIX 15-18 + 股指健康 + 信用中性" },
+          { "score": 3, "condition": "VIX 18-22 + 股指震荡 + 信用中性偏宽" },
+          { "score": 2, "condition": "VIX 22-28 + 股指下跌 + 信用利差扩大" },
+          { "score": 1, "condition": "VIX>28 + 股指破MA200 + 信用冻结（利差飙升）" }
+        ]
+      },
+      {
+        "name": "geopolitical_risk",
+        "label": "地缘冲击",
+        "weight": 0.20,
+        "data_sources": ["新闻", "制裁清单", "关税公告"],
+        "indicators": ["iran_conflict", "tariff_uncertainty", "sanctions"],
+        "scoring_rules": [
+          { "score": 5, "condition": "全球地缘稳定，无重大冲突" },
+          { "score": 4, "condition": "局部紧张（如区域对峙），无直接经济影响" },
+          { "score": 3, "condition": "区域冲突（如中东），间接经济影响" },
+          { "score": 2, "condition": "大国博弈升级，关税/制裁扩大，油价传导" },
+          { "score": 1, "condition": "热战状态或多线冲突，供应链断裂" }
+        ]
+      }
+    ],
+    "composite_formula": "(employment×0.20 + inflation×0.20 + monetary×0.20 + financial×0.20 + geopolitical×0.20)",
+    "cross_validation": {
+      "crude_oil": "油价突破$105 → 强制重新评估通胀评分。油价↑+10Y↑+黄金↑三者同涨 → US L1必须下调≥0.5",
+      "gold_oil_ratio": "金油比>25 + VIX<20 → 矛盾信号，预判风险"
+    }
+  },
+  "cn": {
+    "factors": [
+      {
+        "name": "manufacturing",
+        "label": "制造业",
+        "weight": 0.25,
+        "data_sources": ["NBS PMI", "海关总署出口", "国家统计局 工业增加值"],
+        "indicators": ["pmi_mfg", "pmi_mfg_new_orders", "exports_yoy", "industrial_output_yoy"],
+        "scoring_rules": [
+          { "score": 5, "condition": "PMI>51 + 出口加速 + 工业增加值>8% + PMI连续数月扩张" },
+          { "score": 4, "condition": "PMI 50-51 + 出口稳健 + 工业增加值5-8%" },
+          { "score": 3, "condition": "PMI 49-50 + 出口持平或略降" },
+          { "score": 2, "condition": "PMI <49 但>48 或 出口骤降（如+2.5% vs 预期8.6%）" },
+          { "score": 1, "condition": "PMI<48 + 出口负增长 + 工业增加值连续下降" }
+        ],
+        "_qualitative_note": "高技术制造PMI > 整体PMI = 结构性亮点。出口-进口分化需关注：进口激增可能反映库存重建"
+      },
+      {
+        "name": "consumption",
+        "label": "消费/内需",
+        "weight": 0.20,
+        "data_sources": ["NBS 零售销售", "NBS 非制造PMI", "NBS CPI"],
+        "indicators": ["retail_sales_yoy", "pmi_non_mfg", "cpi_yoy"],
+        "scoring_rules": [
+          { "score": 5, "condition": "零售>5% + 非制造PMI>52 + CPI温和回升(1.5-2.5%)" },
+          { "score": 4, "condition": "零售 3-5% + 非制造在扩张区" },
+          { "score": 3, "condition": "零售 1-3% + 非制造≈50" },
+          { "score": 2, "condition": "零售 0-1% + 非制造<50（收缩区）" },
+          { "score": 1, "condition": "零售<0% + 非制造持续收缩 + CPI通缩" }
+        ]
+      },
+      {
+        "name": "credit",
+        "label": "信贷/流动性",
+        "weight": 0.20,
+        "data_sources": ["PBOC 社融", "PBOC M2/M1", "PBOC LPR"],
+        "indicators": ["tsf_yoy", "m2_yoy", "m1_yoy", "lpr_1y", "lpr_5y"],
+        "scoring_rules": [
+          { "score": 5, "condition": "TSF加速+ LPR下调 + M1-M2剪刀差收窄（资金活性恢复）" },
+          { "score": 4, "condition": "TSF稳定+ LPR不变但定向工具加码" },
+          { "score": 3, "condition": "TSF减速但仍正增长 + M2增速与名义GDP匹配" },
+          { "score": 2, "condition": "TSF萎缩 + M1-M2剪刀差扩大（资金淤积）" },
+          { "score": 1, "condition": "TSF急缩 + M1负增长 + 信贷冻结" }
+        ]
+      },
+      {
+        "name": "real_estate",
+        "label": "房地产",
+        "weight": 0.15,
+        "data_sources": ["CIA 100城房价", "NBS 70城房价", "CF40 新开工"],
+        "indicators": ["new_home_price_yoy", "second_hand_price_yoy"],
+        "scoring_rules": [
+          { "score": 5, "condition": "新房+二手房均回升，新开工转正" },
+          { "score": 4, "condition": "新房趋稳+二手降幅收窄" },
+          { "score": 3, "condition": "降幅收窄但未转正，底部信号" },
+          { "score": 2, "condition": "降幅加速或二手恶化独立于新房" },
+          { "score": 1, "condition": "加速下跌或崩盘" }
+        ]
+      },
+      {
+        "name": "policy",
+        "label": "政策/外部",
+        "weight": 0.20,
+        "data_sources": ["PBOC LPR", "国务院政策公告", "关税清单"],
+        "indicators": ["lpr_change", "fiscal_stance", "tariff_status"],
+        "scoring_rules": [
+          { "score": 5, "condition": "大幅宽松（降准+降LPR+增发专项债）" },
+          { "score": 4, "condition": "温和宽松（定向降准或结构性工具加码）" },
+          { "score": 3, "condition": "政策不变（保持定力），保留空间" },
+          { "score": 2, "condition": "收紧信号（如房地产三条红线回归）" },
+          { "score": 1, "condition": "强力收紧或外部冲击（关税大幅升级）" }
+        ]
+      }
+    ],
+    "composite_formula": "(manufacturing×0.25 + consumption×0.20 + credit×0.20 + real_estate×0.15 + policy×0.20)",
+    "cross_validation": {
+      "cn_us_spread": "中美利差>300bp → CN资产承压，估值折价加大",
+      "southbound_flow": "南向资金持续流入→恒科资金面支撑；流出→减仓信号"
+    }
+  },
+  "jp": {
+    "_note": "JP-L1 exists for 3-track completeness but currently not in primary composite. Weight 0.15 in 3-track, but simplified to US(0.60)+CN(0.40) in current practice.",
+    "factors": [
+      {
+        "name": "monetary",
+        "label": "货币/利率",
+        "weight": 0.40,
+        "indicators": ["jgb_10y", "boj_stance"],
+        "scoring_rules": [
+          { "score": 5, "condition": "JGB 10Y<0.5% + BOJ宽松 + CPI可控" },
+          { "score": 3, "condition": "JGB 10Y 0.5-1.0% + BOJ中性" },
+          { "score": 1, "condition": "JGB 10Y>1.5% + BOJ紧缩 + CPI飙升" }
+        ]
+      },
+      {
+        "name": "currency",
+        "label": "汇率",
+        "weight": 0.30,
+        "indicators": ["usdjpy"],
+        "scoring_rules": [
+          { "score": 5, "condition": "USDJPY<130 → 日元强势，日资产估值支撑" },
+          { "score": 3, "condition": "USDJPY 130-150" },
+          { "score": 1, "condition": "USDJPY>160 → 日元崩溃，日央行被迫干预" }
+        ]
+      },
+      {
+        "name": "growth",
+        "label": "增长/通胀",
+        "weight": 0.30,
+        "indicators": ["japan_cpi_yoy", "nikkei_level"],
+        "scoring_rules": [
+          { "score": 5, "condition": "CPI 1-2% + 日经健康" },
+          { "score": 3, "condition": "CPI<0% 或 CPI>3%" },
+          { "score": 1, "condition": "滞胀或通缩恶化" }
+        ]
+      }
+    ]
+  },
+  "L1_composite_formula": "us_composite × 0.60 + cn_composite × 0.40",
+  "quadrant_analysis": {
+    "_source": "sop/三层多因子投研框架.md §四情景象限 (v1.2)",
+    "method": "QQQ月收益(US) × FXI月收益(CN) → 4象限",
+    "quadrants": {
+      "US_UP_CN_UP": { "hstech_monthly_avg": "+7.15%", "frequency": "44%", "positive_rate": "100%", "hk_position": "≤15%" },
+      "US_UP_CN_DOWN": { "hstech_monthly_avg": "-5.91%", "frequency": "19%", "positive_rate": "14%", "hk_position": "≤10%, 只减不增" },
+      "US_DOWN_CN_UP": { "hstech_monthly_avg": "+6.98%", "frequency": "8%", "positive_rate": "67%", "hk_position": "≤12%" },
+      "US_DOWN_CN_DOWN": { "hstech_monthly_avg": "-5.61%", "frequency": "25%", "positive_rate": "0%", "hk_position": "≤5%" }
+    }
+  }
+}

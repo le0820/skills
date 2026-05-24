@@ -7,7 +7,8 @@ import numpy as np
 import json, os, warnings
 warnings.filterwarnings('ignore')
 
-OUTPUT = os.path.expanduser("~/.openclaw/workspace/analysis/cn_ff_results_20260509.json")
+from datetime import datetime
+OUTPUT = os.path.expanduser(f"~/.openclaw/workspace/analysis/cn_ff_results_{datetime.now().strftime('%Y%m%d')}.json")
 
 # ===== 1. Load Index Data & Compute Monthly Returns =====
 def monthly_returns(csv_path):
@@ -179,7 +180,11 @@ for symbol, info in etfs.items():
     # Load previous US FF5 results
     prev = {}
     try:
-        with open(os.path.expanduser("~/.openclaw/workspace/analysis/p1_upgrade_results_20260509.json")) as f:
+        import glob
+        pattern = os.path.expanduser("~/.openclaw/workspace/analysis/p1_upgrade_results_*.json")
+        files = sorted(glob.glob(pattern))
+        p1_path = files[-1] if files else os.path.expanduser("~/.openclaw/workspace/analysis/p1_upgrade_results_20260509.json")
+        with open(p1_path) as f:
             prev = json.load(f)
     except:
         pass
@@ -219,8 +224,18 @@ for sym, r in results.items():
     print(f"  {r['name']:<15} {us:.4f}      {cn_b:.4f}      {cn_f:.4f}      {'+' if impr > 0 else ''}{impr:.0f}%")
 
 # Save
+# Save — convert numpy types to Python native types
+def _clean(obj):
+    if isinstance(obj, (np.integer,)): return int(obj)
+    if isinstance(obj, (np.floating,)): return float(obj)
+    if isinstance(obj, (np.bool_,)): return bool(obj)
+    if isinstance(obj, np.ndarray): return obj.tolist()
+    if isinstance(obj, dict): return {k: _clean(v) for k, v in obj.items()}
+    if isinstance(obj, list): return [_clean(v) for v in obj]
+    return obj
+
 os.makedirs(os.path.dirname(OUTPUT), exist_ok=True)
 with open(OUTPUT, 'w') as f:
-    json.dump(results, f, ensure_ascii=False, indent=2)
+    json.dump(_clean(results), f, ensure_ascii=False, indent=2)
 
 print(f"\n✅ Saved to {OUTPUT}")

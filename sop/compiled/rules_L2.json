@@ -1,0 +1,190 @@
+{
+  "_description": "L2 Style Factor Scoring Rules — compiled from 三层多因子投研框架 v1.4 + 评分可解释性手册 v1.1. PRIMARY scoring reference for L2. Five factors scored per ETF, equal-weight averaged to composite.",
+  "_version": "compiled-2026-05-24",
+  "_source_sops": [
+    "sop/三层多因子投研框架.md (v1.4)",
+    "sop/评分可解释性手册.md (v1.1)"
+  ],
+  "_universe": ["513130.SH", "513310.SH", "159682.SZ", "QQQ.US"],
+  "factors": [
+    {
+      "name": "momentum",
+      "label": "动量(12-1月)",
+      "weight": 0.20,
+      "description": "12个月总收益 - 最近1个月收益，等权平均4只ETF",
+      "per_etf_scoring": {
+        "method": "每只ETF计算 12月收益-1月收益，得分后等权平均",
+        "rules": [
+          { "score": 5, "condition": "> +50%" },
+          { "score": 4, "condition": "+20% ~ +50%" },
+          { "score": 3, "condition": "0% ~ +20%" },
+          { "score": 2, "condition": "-20% ~ 0%" },
+          { "score": 1, "condition": "< -20%" }
+        ]
+      },
+      "sub_indicators": {
+        "ma20_breadth": {
+          "description": "价格站上MA20的ETF占比",
+          "scoring": [
+            { "score": 5, "condition": ">80%" },
+            { "score": 4, "condition": "50-80%" },
+            { "score": 3, "condition": "30-50%" },
+            { "score": 2, "condition": "15-30%" },
+            { "score": 1, "condition": "<15%" }
+          ]
+        },
+        "roc_20d": {
+          "description": "20日变动率",
+          "scoring": [
+            { "score": 5, "condition": "QQQ+8.7%及以上，全ETF正" },
+            { "score": 3, "condition": "混合（有正有负）" },
+            { "score": 1, "condition": "全部ETF负" }
+          ]
+        },
+        "spx_above_ma50_pct": {
+          "description": "标普500成分股站上50日均线比例",
+          "scoring": [
+            { "score": 5, "condition": ">70%" },
+            { "score": 4, "condition": "50-70%" },
+            { "score": 3, "condition": "30-50%" },
+            { "score": 1, "condition": "<30%" }
+          ]
+        },
+        "macd_bullish_count": {
+          "description": "MACD多头ETF只数",
+          "scoring": [
+            { "score": 5, "condition": "4/4" },
+            { "score": 4, "condition": "3/4" },
+            { "score": 3, "condition": "2/4" },
+            { "score": 2, "condition": "1/4" },
+            { "score": 1, "condition": "0/4" }
+          ]
+        }
+      },
+      "_note": "主评分用 per_etf_scoring（12-1月动量），sub_indicators 用于验证和定性判断"
+    },
+    {
+      "name": "value",
+      "label": "价值(HML)",
+      "weight": 0.20,
+      "description": "便宜vs贵的程度。高=便宜(价值), 低=贵(成长)。使用 FF5 HML β + 估值指标综合",
+      "per_etf_scoring": {
+        "method": "FF5回归 HML β 映射，显著β取分，不显著取中性3",
+        "rules": [
+          { "score": 5, "condition": "β > 0.8（强价值）", "interpretation": "持仓显著偏价值" },
+          { "score": 4, "condition": "β 0.4~0.8", "interpretation": "偏价值" },
+          { "score": 3, "condition": "β -0.4~0.4 或 不显著", "interpretation": "中性" },
+          { "score": 2, "condition": "β -0.8~-0.4", "interpretation": "偏成长" },
+          { "score": 1, "condition": "β < -0.8（强成长）", "interpretation": "持仓显著偏成长" }
+        ]
+      },
+      "macro_valuation_indicators": {
+        "_note": "用于宏观估值判断（参考三层多因子§2.2），非per-ETF算子",
+        "shiller_cape": [
+          { "score": 5, "condition": "<15" },
+          { "score": 4, "condition": "15-20" },
+          { "score": 3, "condition": "20-25" },
+          { "score": 2, "condition": "25-30" },
+          { "score": 1, "condition": ">30" }
+        ],
+        "ttm_pe": [
+          { "score": 5, "condition": "<14" },
+          { "score": 4, "condition": "14-17" },
+          { "score": 3, "condition": "17-21" },
+          { "score": 2, "condition": "21-25" },
+          { "score": 1, "condition": ">25" }
+        ],
+        "earnings_yield_vs_10y": [
+          { "score": 5, "condition": ">3%（盈利收益率远高于国债）" },
+          { "score": 4, "condition": "1.5-3%" },
+          { "score": 3, "condition": "0-1.5%" },
+          { "score": 2, "condition": "-1%~0%（盈利收益率低于国债）" },
+          { "score": 1, "condition": "< -1%（大幅倒挂）" }
+        ]
+      }
+    },
+    {
+      "name": "growth",
+      "label": "成长(RMW+CMA反)",
+      "weight": 0.20,
+      "description": "盈利增长动能。RMW(盈利β) + CMA反转(投资保守β)。高RMW+低CMA=成长。来自FF5回归",
+      "per_etf_scoring": {
+        "method": "FF5回归 RMW β 和 CMA β 综合映射。成长暴露 = RMW高 + CMA低（激进投资）",
+        "rmw_rules": [
+          { "score": 5, "condition": "β > 0.8", "interpretation": "强盈利" },
+          { "score": 4, "condition": "β 0.4~0.8" },
+          { "score": 3, "condition": "β -0.4~0.4 或 不显著" },
+          { "score": 2, "condition": "β -0.8~-0.4" },
+          { "score": 1, "condition": "β < -0.8", "interpretation": "弱盈利/亏损" }
+        ],
+        "cma_rules": [
+          { "score": 5, "condition": "β < -0.8（激进投资=成长）", "interpretation": "激进扩张=高成长" },
+          { "score": 4, "condition": "β -0.8~-0.4" },
+          { "score": 3, "condition": "β -0.4~0.4 或 不显著" },
+          { "score": 2, "condition": "β 0.4~0.8" },
+          { "score": 1, "condition": "β > 0.8（保守投资=低成长）", "interpretation": "保守不投=缺乏成长" }
+        ],
+        "composite": "RMW分数 × 0.5 + CMA分数 × 0.5"
+      },
+      "macro_growth_indicators": [
+        { "indicator": "S&P 500 EPS增速趋势", "scoring": "加速=5, 稳定=4, 减速=3, 持平=2, 下降=1" },
+        { "indicator": "AI capex增速", "scoring": ">30%=5, 20-30%=4, 10-20%=3, 0-10%=2, 负=1" },
+        { "indicator": "营收增速-成本增速", "scoring": "扩张=5, 持平=3, 收缩=1" },
+        { "indicator": "创新扩散度", "scoring": "AI多行业渗透=5, 集中科技=3, 停滞=1" }
+      ]
+    },
+    {
+      "name": "profitability",
+      "label": "盈利(RMW)",
+      "weight": 0.20,
+      "description": "纯盈利质量。来自 FF5 RMW 因子 β。高=持有高盈利公司",
+      "per_etf_scoring": {
+        "method": "FF5回归 RMW β 映射",
+        "rules": [
+          { "score": 5, "condition": "β > 0.8" },
+          { "score": 4, "condition": "β 0.4~0.8" },
+          { "score": 3, "condition": "β -0.4~0.4 或 不显著" },
+          { "score": 2, "condition": "β -0.8~-0.4" },
+          { "score": 1, "condition": "β < -0.8" }
+        ]
+      }
+    },
+    {
+      "name": "size",
+      "label": "规模(SMB)",
+      "weight": 0.20,
+      "description": "小盘vs大盘暴露。来自 FF5 SMB 因子 β。正值=偏小盘，负值=偏大盘",
+      "per_etf_scoring": {
+        "method": "FF5回归 SMB β 映射。考虑大盘稳定性偏好：大盘>小盘",
+        "rules": [
+          { "score": 5, "condition": "β < -0.8（显著大盘）", "interpretation": "大盘稳定" },
+          { "score": 4, "condition": "β -0.8~-0.4", "interpretation": "偏大盘" },
+          { "score": 3, "condition": "β -0.4~0.4 或 不显著", "interpretation": "中性" },
+          { "score": 2, "condition": "β 0.4~0.8", "interpretation": "偏小盘" },
+          { "score": 1, "condition": "β > 0.8（显著小盘）", "interpretation": "小盘风险" }
+        ]
+      }
+    }
+  ],
+  "ff5_etf_model_assignments": {
+    "_note": "不同ETF使用不同因子体系进行回归（评分可解释性手册§2）",
+    "QQQ.US": { "model": "US_FF5", "note": "纯美股" },
+    "513310.SH": { "model": "mixed", "us_weight": 0.60, "cn_weight": 0.40, "note": "韩国制造+中国需求" },
+    "513130.SH": { "model": "CN_FF", "us_weight": 0.20, "cn_weight": 0.80, "note": "港股上市但基本面在中国" },
+    "159682.SZ": { "model": "CN_FF", "us_weight": 0.00, "cn_weight": 1.00, "note": "纯中国资产" }
+  },
+  "exposure_matrix": {
+    "_source": "sop/三层多因子投研框架.md §L1权重",
+    "QQQ.US": { "us_normal": 1.00, "us_stress": 1.00, "cn_normal": 0.00, "cn_stress": 0.00 },
+    "513310.SH": { "us_normal": 0.70, "us_stress": 0.70, "cn_normal": 0.30, "cn_stress": 0.30 },
+    "513130.SH": { "us_normal": 0.15, "us_stress": 0.40, "cn_normal": 0.85, "cn_stress": 0.60, "_warning": "非对称暴露：压力期US暴露从15%跳至40%" },
+    "159682.SZ": { "us_normal": 0.05, "us_stress": 0.05, "cn_normal": 0.95, "cn_stress": 0.95 },
+    "黄金ETF": { "us_normal": 0.50, "us_stress": 0.50, "cn_normal": 0.50, "cn_stress": 0.50, "_note": "独立避险资产" }
+  },
+  "L2_composite_formula": "average of 5 factor scores (equal weight 0.20 each)",
+  "style_interpretation": {
+    "momentum_driven": "动量因子>4.0 → 强趋势，顺势而为",
+    "growth_bubble_warning": "动量>4.0 + 价值<2.0 + 成长>4.0 → 成长股牛市后期特征（参考1998-99, 2020-21）",
+    "value_opportunity": "价值>4.0 + 动量<3.0 → 均值回归机会"
+  }
+}

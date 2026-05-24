@@ -8,7 +8,8 @@ from scipy import stats
 import json, os, warnings
 warnings.filterwarnings('ignore')
 
-OUTPUT = os.path.expanduser("~/.openclaw/workspace/analysis/p1_upgrade_results_20260509.json")
+from datetime import datetime
+OUTPUT = os.path.expanduser(f"~/.openclaw/workspace/analysis/p1_upgrade_results_{datetime.now().strftime('%Y%m%d')}.json")
 
 # ===== 1. Load FF5 Data =====
 ff5_raw = pd.read_csv('/tmp/ff5_data/F-F_Research_Data_5_Factors_2x3.csv', skiprows=3)

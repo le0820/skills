@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/scores_L2.schema.json",
+  "title": "L2 Style Factor Scores",
+  "description": "Standardized L2 market style scoring. Five factors (Momentum, Value, Growth, Profitability, Size) scored 1-5 with per-ETF breakdown and equal-weight average. Includes FF5 regression loadings where available.",
+  "type": "object",
+  "required": ["timestamp", "factors", "composite", "assessment"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "framework_version": {
+      "type": "string"
+    },
+    "etf_universe": {
+      "type": "array",
+      "description": "ETFs scored in L2",
+      "items": {
+        "type": "string",
+        "enum": ["513130.SH", "513310.SH", "159682.SZ", "QQQ.US"]
+      }
+    },
+    "factors": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["name", "label", "per_asset", "score"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": ["momentum", "value", "growth", "profitability", "size"],
+            "description": "Factor identifier"
+          },
+          "label": {
+            "type": "string",
+            "description": "Chinese label",
+            "examples": ["动量(12-1月)", "价值(HML)", "成长(RMW+CMA反)", "盈利(RMW)", "规模(SMB)"]
+          },
+          "per_asset": {
+            "type": "object",
+            "description": "Per-asset factor exposure and score",
+            "additionalProperties": {
+              "type": "object",
+              "required": ["score"],
+              "properties": {
+                "raw_value": {
+                  "description": "Raw factor value for this asset"
+                },
+                "score": {
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "ff5_beta": {
+                  "type": "number",
+                  "description": "FF5 regression beta for this factor (if applicable)"
+                },
+                "ff5_t_stat": {
+                  "type": "number",
+                  "description": "FF5 regression t-statistic"
+                },
+                "ff5_significant": {
+                  "type": "boolean",
+                  "description": "Whether beta is statistically significant at 95%"
+                },
+                "rationale": {
+                  "type": "string",
+                  "description": "Why this score for this asset"
+                }
+              }
+            }
+          },
+          "score": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "Equal-weight average score across all assets"
+          },
+          "scoring_method": {
+            "type": "string",
+            "description": "Mapping rule from raw values to 1-5 score"
+          },
+          "weight": {
+            "type": "number",
+            "description": "Equal weight within L2 (0.20 each of 5 factors)"
+          }
+        }
+      }
+    },
+    "ff5_regression": {
+      "type": "object",
+      "description": "FF5 regression summary for factor exposure quantification",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "US FF5 or CN-FF",
+          "enum": ["US_FF5", "CN_FF", "mixed"]
+        },
+        "etf_assignments": {
+          "type": "object",
+          "description": "Which factor model applies to each ETF",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "model": { "type": "string", "enum": ["US_FF5", "CN_FF"] },
+              "r2": { "type": "number", "description": "Model R²" },
+              "n_months": { "type": "integer" },
+              "alpha_monthly": { "type": "number" },
+              "alpha_annual": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "condition_adjustment": {
+      "type": "object",
+      "description": "Non-linear condition adjustments (e.g. HSTECH stress mode)",
+      "properties": {
+        "applied": { "type": "boolean" },
+        "rule": { "type": "string" },
+        "adjustment": { "type": "number" },
+        "reason": { "type": "string" }
+      }
+    },
+    "composite": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "L2 composite = average of 5 factor scores"
+        }
+      }
+    },
+    "assessment": {
+      "type": "string",
+      "description": "Narrative synthesis: which style is dominant, rotation signals, implications for asset allocation"
+    }
+  }
+}

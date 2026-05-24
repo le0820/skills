@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/scores_L3.schema.json",
+  "title": "L3 Market Sentiment & Quantitative Risk Scores",
+  "description": "Standardized L3 scoring output. Two sub-modules: (1) Sentiment — VIX, Put/Call, AAII, DXY, Credit Spreads; (2) Quantitative Risk — VaR, CVaR, Max Drawdown, VaR Trend. Sentiment weight 50%, Risk weight 50% in L3 composite.",
+  "type": "object",
+  "required": ["timestamp", "sentiment", "risk", "composite", "assessment"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "framework_version": {
+      "type": "string"
+    },
+    "sentiment": {
+      "type": "object",
+      "description": "L3 Market Sentiment (weight 0.50 in L3 composite)",
+      "required": ["indicators", "composite"],
+      "properties": {
+        "indicators": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["name", "label", "value", "score", "data_source"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": ["vix", "put_call", "aaii_survey", "dxy", "credit_spread"]
+              },
+              "label": {
+                "type": "string",
+                "examples": ["VIX", "Put/Call", "AAII Bull-Bear", "美元指数", "信用利差"]
+              },
+              "value": {
+                "type": "number",
+                "description": "Current raw value"
+              },
+              "score": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 5,
+                "description": "Mapped score 1-5"
+              },
+              "scoring_rule": {
+                "type": "string",
+                "description": "Mapping logic from raw value to score"
+              },
+              "data_source": {
+                "type": "string"
+              },
+              "trend": {
+                "type": "string",
+                "enum": ["improving", "stable", "deteriorating"],
+                "description": "Directional trend"
+              },
+              "rationale": {
+                "type": "string",
+                "description": "Qualitative judgment about the current reading"
+              }
+            }
+          }
+        },
+        "composite": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Sentiment composite = equal-weight average of 5 indicators"
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "description": "L3 Quantitative Risk (weight 0.50 in L3 composite)",
+      "required": ["indicators", "per_asset", "composite"],
+      "properties": {
+        "indicators": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": ["name", "label", "score", "data_source"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": ["var_95_1d", "cvar_95_1d", "max_drawdown_60d", "var_trend"]
+              },
+              "label": {
+                "type": "string",
+                "examples": ["VaR(95%,1d)", "CVaR(95%,1d)", "60日最大回撤", "VaR趋势"]
+              },
+              "score": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "scoring_rule": { "type": "string" },
+              "data_source": { "type": "string" }
+            }
+          }
+        },
+        "per_asset": {
+          "type": "object",
+          "description": "Risk metrics per ETF",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "ann_volatility": { "type": "number", "description": "年化波动率(%)" },
+              "sharpe_ratio": { "type": "number" },
+              "var_daily_95pct": { "type": "number", "description": "95% 1-day VaR (%)" },
+              "var_daily_99pct": { "type": "number", "description": "99% 1-day VaR (%)" },
+              "cvar_daily_95pct": { "type": "number", "description": "95% 1-day CVaR (%)" },
+              "max_dd_pct": { "type": "number", "description": "最大回撤(%)" },
+              "dd_60d_pct": { "type": "number", "description": "60日最大回撤(%)" },
+              "in_drawdown_now": { "type": "boolean" },
+              "recovery_days": { "type": "integer", "description": "从最大回撤恢复天数" },
+              "var_trend_pct": {
+                "type": "number",
+                "description": "VaR 20日 vs 40日均值变化(%), 负值=改善"
+              },
+              "var_trend_direction": {
+                "type": "string",
+                "enum": ["improving", "stable", "deteriorating"]
+              }
+            }
+          }
+        },
+        "composite": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Risk composite = equal-weight average of 4 indicators"
+        }
+      }
+    },
+    "composite": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "L3 composite = sentiment×0.50 + risk×0.50"
+        }
+      }
+    },
+    "assessment": {
+      "type": "string",
+      "description": "Narrative synthesis: current market mood, risk appetite, positioning implications"
+    }
+  }
+}

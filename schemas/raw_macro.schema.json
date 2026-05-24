@@ -1,0 +1,345 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/raw_macro.schema.json",
+  "title": "Raw Macroeconomic Data",
+  "description": "Standardized container for all macroeconomic indicators consumed by L1 scoring. All values timestamp-aligned to the same data release cycle. Data sources must be annotated per field (see source record).",
+  "type": "object",
+  "required": ["timestamp", "us", "cn", "source"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC data collection timestamp"
+    },
+    "us": {
+      "type": "object",
+      "description": "US macroeconomic indicators",
+      "required": ["nonfarm_payroll", "unemployment_rate", "cpi_yoy", "core_pce_yoy", "fed_rate", "ust_2y", "ust_10y", "ust_30y", "dxy", "vix"],
+      "properties": {
+        "nonfarm_payroll": {
+          "type": "number",
+          "description": "月度非农就业变化(千人), e.g. +115"
+        },
+        "nonfarm_expected": {
+          "type": "number",
+          "description": "市场预期非农(千人)"
+        },
+        "unemployment_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20,
+          "description": "失业率(%)"
+        },
+        "cpi_yoy": {
+          "type": "number",
+          "description": "CPI 同比(%)"
+        },
+        "cpi_mom": {
+          "type": "number",
+          "description": "CPI 环比(%)"
+        },
+        "core_pce_yoy": {
+          "type": "number",
+          "description": "核心 PCE 同比(%)"
+        },
+        "core_cpi_yoy": {
+          "type": "number",
+          "description": "核心 CPI 同比(%)"
+        },
+        "wage_growth_yoy": {
+          "type": "number",
+          "description": "平均时薪同比(%)"
+        },
+        "fed_rate": {
+          "type": "number",
+          "description": "联邦基金利率目标上限(%)"
+        },
+        "fed_rate_lower": {
+          "type": "number",
+          "description": "联邦基金利率目标下限(%)"
+        },
+        "fed_stance": {
+          "type": "string",
+          "enum": ["easing", "easing_paused", "hold", "hawkish_risk", "tightening"],
+          "description": "Fed 政策姿态定性判断"
+        },
+        "ust_2y": {
+          "type": "number",
+          "description": "美国2年期国债收益率(%)"
+        },
+        "ust_10y": {
+          "type": "number",
+          "description": "美国10年期国债收益率(%)"
+        },
+        "ust_30y": {
+          "type": "number",
+          "description": "美国30年期国债收益率(%)"
+        },
+        "ust_2y10y_spread": {
+          "type": "number",
+          "description": "2Y-10Y 利差(bp)"
+        },
+        "tips_10y": {
+          "type": "number",
+          "description": "10年期 TIPS 实际收益率(%)"
+        },
+        "breakeven_10y": {
+          "type": "number",
+          "description": "10年期盈亏平衡通胀率(%)"
+        },
+        "dxy": {
+          "type": "number",
+          "description": "美元指数(DXY)"
+        },
+        "vix": {
+          "type": "number",
+          "description": "CBOE 波动率指数"
+        },
+        "spx_level": {
+          "type": "number",
+          "description": "标普500指数点位"
+        },
+        "spx_ma200": {
+          "type": "number",
+          "description": "标普500 200日均线"
+        },
+        "credit_spread_ig": {
+          "type": "number",
+          "description": "投资级信用利差(bp)"
+        },
+        "credit_spread_hy": {
+          "type": "number",
+          "description": "高收益信用利差(bp)"
+        },
+        "private_credit_default_rate": {
+          "type": "number",
+          "description": "美国私募信贷违约率(%)"
+        },
+        "gdp_growth": {
+          "type": "number",
+          "description": "GDP 年化环比增速(%)"
+        },
+        "ism_mfg": {
+          "type": "number",
+          "description": "ISM 制造业 PMI"
+        },
+        "ism_services": {
+          "type": "number",
+          "description": "ISM 服务业 PMI"
+        }
+      }
+    },
+    "cn": {
+      "type": "object",
+      "description": "China macroeconomic indicators",
+      "required": ["pmi_mfg", "cpi_yoy", "ppi_yoy", "m2_yoy", "tsf_yoy", "lpr_1y", "lpr_5y"],
+      "properties": {
+        "pmi_mfg": {
+          "type": "number",
+          "description": "官方制造业 PMI"
+        },
+        "pmi_mfg_new_orders": {
+          "type": "number",
+          "description": "PMI 新订单分项"
+        },
+        "pmi_mfg_export_orders": {
+          "type": "number",
+          "description": "PMI 新出口订单分项"
+        },
+        "pmi_non_mfg": {
+          "type": "number",
+          "description": "官方非制造业 PMI"
+        },
+        "pmi_caixin_mfg": {
+          "type": "number",
+          "description": "财新制造业 PMI"
+        },
+        "cpi_yoy": {
+          "type": "number",
+          "description": "CPI 同比(%)"
+        },
+        "ppi_yoy": {
+          "type": "number",
+          "description": "PPI 同比(%)"
+        },
+        "m2_yoy": {
+          "type": "number",
+          "description": "M2 同比(%)"
+        },
+        "m1_yoy": {
+          "type": "number",
+          "description": "M1 同比(%)"
+        },
+        "tsf_flow": {
+          "type": "number",
+          "description": "社会融资规模当月增量(亿元)"
+        },
+        "tsf_yoy": {
+          "type": "number",
+          "description": "社融存量同比(%)"
+        },
+        "tsf_3m_rolling": {
+          "type": "number",
+          "description": "社融3月滚动求和(亿元)"
+        },
+        "lpr_1y": {
+          "type": "number",
+          "description": "1年期 LPR(%)"
+        },
+        "lpr_5y": {
+          "type": "number",
+          "description": "5年期 LPR(%)"
+        },
+        "rrr": {
+          "type": "number",
+          "description": "存款准备金率(%)"
+        },
+        "retail_sales_yoy": {
+          "type": "number",
+          "description": "社会消费品零售总额同比(%)"
+        },
+        "industrial_output_yoy": {
+          "type": "number",
+          "description": "规模以上工业增加值同比(%)"
+        },
+        "fixed_investment_yoy": {
+          "type": "number",
+          "description": "固定资产投资同比(%)"
+        },
+        "exports_yoy": {
+          "type": "number",
+          "description": "出口同比(%)"
+        },
+        "new_home_price_yoy": {
+          "type": "number",
+          "description": "70城新建商品住宅价格同比(%)"
+        },
+        "second_hand_price_yoy": {
+          "type": "number",
+          "description": "70城二手住宅价格同比(%)"
+        },
+        "usdcny": {
+          "type": "number",
+          "description": "美元/人民币中间价"
+        },
+        "cn_us_spread": {
+          "type": "number",
+          "description": "中美10年期国债利差(bp), CN-US"
+        },
+        "southbound_flow": {
+          "type": "number",
+          "description": "南向资金净流入(亿元)"
+        },
+        "northbound_flow": {
+          "type": "number",
+          "description": "北向资金净流入(亿元)"
+        },
+        "margin_balance": {
+          "type": "number",
+          "description": "两融余额(亿元)"
+        }
+      }
+    },
+    "jp": {
+      "type": "object",
+      "description": "Japan macroeconomic indicators (L1 JP track, weight 0.15)",
+      "properties": {
+        "jgb_10y": {
+          "type": "number",
+          "description": "日本10年期国债收益率(%)"
+        },
+        "usdjpy": {
+          "type": "number",
+          "description": "美元/日元汇率"
+        },
+        "boj_rate": {
+          "type": "number",
+          "description": "日央行政策利率(%)"
+        },
+        "boj_stance": {
+          "type": "string",
+          "enum": ["dovish", "neutral", "hawkish"],
+          "description": "日央行政策姿态"
+        },
+        "nikkei_level": {
+          "type": "number",
+          "description": "日经225指数"
+        },
+        "japan_cpi_yoy": {
+          "type": "number",
+          "description": "日本CPI同比(%)"
+        }
+      }
+    },
+    "commodity": {
+      "type": "object",
+      "description": "Commodity prices for cross-validation (原油 + 黄金 + 工业金属)",
+      "properties": {
+        "brent_price": {
+          "type": "number",
+          "description": "布伦特原油价格(USD/桶)"
+        },
+        "wti_price": {
+          "type": "number",
+          "description": "WTI原油价格(USD/桶)"
+        },
+        "brent_wow": {
+          "type": "number",
+          "description": "布伦特周涨跌幅(%)"
+        },
+        "gold_price": {
+          "type": "number",
+          "description": "黄金现货(USD/盎司)"
+        },
+        "gold_volatility": {
+          "type": "number",
+          "description": "黄金30日波动率(%)"
+        },
+        "copper_price": {
+          "type": "number",
+          "description": "LME铜(USD/吨)"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "description": "Data source annotation per field group. Required for auditability.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": ["TickFlow", "qveris", "FMP", "cn_financial_pro", "web_search", "manual"],
+            "description": "Data provider"
+          },
+          "official_publisher": {
+            "type": "string",
+            "description": "Official release institution (e.g. BLS, NBS, Fed, PBOC)"
+          },
+          "release_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Official data release date"
+          },
+          "retrieved_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the data was retrieved"
+          },
+          "verified": {
+            "type": "boolean",
+            "description": "Whether cross-validated with a second source"
+          },
+          "verification_source": {
+            "type": "string",
+            "description": "Second source used for cross-validation"
+          },
+          "verification_diff_pct": {
+            "type": "number",
+            "description": "Difference from verification source (%)"
+          }
+        }
+      }
+    }
+  }
+}

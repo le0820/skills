@@ -1,0 +1,189 @@
+{
+  "_description": "SOP Document Index — machine-readable registry of all 13 SOP documents. Used for (1) selective loading: query by tags, stages, or asset type to find relevant SOPs; (2) version tracking: which SOP version was used for each scoring run.",
+  "_version": "compiled-2026-05-24",
+  "documents": [
+    {
+      "file": "三层多因子投研框架.md",
+      "version": "v1.4",
+      "updated": "2026-05-09",
+      "type": "scoring_framework",
+      "layer": ["L1", "L2", "L3"],
+      "asset_scope": ["all"],
+      "tags": ["宏观", "因子", "评分", "仓位", "中美双轨", "四象限", "HSTECH暴露修正"],
+      "stages_provides": ["L1宏观评分规则", "L2风格因子评分规则", "L3情绪温度评分规则", "仓位映射表", "情景分析"],
+      "dependencies": ["评分可解释性手册.md", "中国宏观因子框架.md", "原油分析框架.md", "加密分析框架.md", "HSTECH因子分析+四标修正_20260509.md"],
+      "token_estimate": "~8,000",
+      "compiled_equivalent": "sop/compiled/rules_L1.json + rules_L2.json + rules_L3.json (~1,800 tokens total)"
+    },
+    {
+      "file": "评分可解释性手册.md",
+      "version": "v1.1",
+      "updated": "2026-05-09",
+      "type": "scoring_methodology",
+      "layer": ["L2", "L3"],
+      "asset_scope": ["all"],
+      "tags": ["FF5", "CN-FF", "因子回归", "VaR", "CVaR", "评分可解释性", "方法论"],
+      "stages_provides": ["FF5因子详解(Mkt/SMB/HML/RMW/CMA)", "中国本土因子CN-FF设计", "评分表可解释性升级", "完整综合评分计算"],
+      "dependencies": ["三层多因子投研框架.md"],
+      "token_estimate": "~6,500",
+      "compiled_equivalent": "sop/compiled/rules_L2.json + rules_L3.json (评分规则已包含)"
+    },
+    {
+      "file": "中国宏观因子框架.md",
+      "version": "v1.0",
+      "updated": "2026-05-08",
+      "type": "scoring_framework",
+      "layer": ["L1"],
+      "asset_scope": ["CN", "恒生科技", "创业板", "中韩半导体"],
+      "tags": ["中国宏观", "PMI", "信贷脉冲", "房地产", "南向/北向资金", "中美对比"],
+      "stages_provides": ["CN-L1 五因子评分规则", "中美宏观对比矩阵", "南向/北向资金监控", "数据发布日历"],
+      "dependencies": ["三层多因子投研框架.md"],
+      "token_estimate": "~4,000",
+      "compiled_equivalent": "sop/compiled/rules_L1.json (CN section)"
+    },
+    {
+      "file": "ai_investment_sop.md",
+      "version": "V2.0",
+      "updated": "2026-04-25",
+      "type": "workflow",
+      "layer": ["all"],
+      "asset_scope": ["AI产业", "半导体ETF", "创业板50ETF", "恒生科技ETF", "纳斯达克100ETF"],
+      "tags": ["11阶段", "触发信号", "产业链定位", "英伟达五层蛋糕", "芒格思维模型", "证伪条件"],
+      "stages_provides": ["11阶段完整分析流水线", "信号触发与分类", "宏观快照", "产业链定位(英伟达框架)", "投资假设与证伪", "原始数据交付规格"],
+      "dependencies": ["三层多因子投研框架.md", "投研分析师标准化业务流程.md"],
+      "token_estimate": "~5,000",
+      "compiled_equivalent": "— 流程类SOP，不适合完全结构化。但阶段模板可作为agent提示词片段加载。"
+    },
+    {
+      "file": "投研分析师标准化业务流程.md",
+      "version": "v1.0",
+      "updated": "2026-04-25",
+      "type": "workflow",
+      "layer": ["all"],
+      "asset_scope": ["all"],
+      "tags": ["数据规范", "交叉验证", "代码格式", "查询规范", "异常处理"],
+      "stages_provides": ["数据优先级体系", "交叉验证规则(0.5%/1%/0.3%容差)", "标的代码格式", "异常处理/降级", "标准化投研三段流程"],
+      "dependencies": [],
+      "token_estimate": "~3,500",
+      "compiled_equivalent": "sop/compiled/data_source_map.json (数据优先级和交叉验证规则)"
+    },
+    {
+      "file": "TickFlow市场数据查询SOP.md",
+      "version": "v1.0",
+      "updated": "2026-04-25",
+      "type": "data",
+      "layer": ["data"],
+      "asset_scope": ["all"],
+      "tags": ["TickFlow", "数据查询", "API", "批量查询"],
+      "stages_provides": ["TickFlow Skill使用方法", "查询命令参考"],
+      "dependencies": ["投研分析师标准化业务流程.md"],
+      "token_estimate": "~2,000",
+      "compiled_equivalent": "sop/compiled/data_source_map.json + skills/tickflow/SKILL.md"
+    },
+    {
+      "file": "中金黄金三因子分析SOP.md",
+      "version": "v1.0",
+      "updated": "2026-04-25",
+      "type": "asset_analysis",
+      "layer": ["cross_validation"],
+      "asset_scope": ["黄金"],
+      "tags": ["黄金", "央行购金", "美国债务", "美元指数", "三因子"],
+      "stages_provides": ["黄金三因子评分规则", "央行购金/美国债务/美元指数分析", "输出规范"],
+      "dependencies": ["三层多因子投研框架.md"],
+      "token_estimate": "~500",
+      "compiled_equivalent": "— 简短SOP(22行)，可全量加载。但规则尚未结构化收录。"
+    },
+    {
+      "file": "原油分析框架.md",
+      "version": "v1.0",
+      "updated": "2026-05-09",
+      "type": "cross_validation",
+      "layer": ["cross_validation"],
+      "asset_scope": ["原油", "all (交叉验证)"],
+      "tags": ["原油", "金油比", "供给冲击", "六维度", "交叉验证", "五资产网络"],
+      "stages_provides": ["原油六维度分析", "金油比交叉温度计", "L1修正规则(±0.1-0.3)", "五资产交叉验证网络", "滞胀预警规则"],
+      "dependencies": ["三层多因子投研框架.md", "中金黄金三因子分析SOP.md"],
+      "token_estimate": "~4,000",
+      "compiled_equivalent": "sop/compiled/rules_L1.json (cross_validation section) + weight_matrix.json (cross_validation_adjustments)"
+    },
+    {
+      "file": "加密分析框架.md",
+      "version": "v1.0",
+      "updated": "2026-05-09",
+      "type": "asset_analysis",
+      "layer": ["L4"],
+      "asset_scope": ["稳定币", "ETH", "加密"],
+      "tags": ["加密", "稳定币", "Staking", "链上收益", "全球配置"],
+      "stages_provides": ["稳定币宏观驱动因子", "ETH Staking分析", "加密与传统资产相关性"],
+      "dependencies": ["三层多因子投研框架.md"],
+      "token_estimate": "~5,000",
+      "compiled_equivalent": "— 尚未结构化。⚠️ 合规注记：不构成投资建议。"
+    },
+    {
+      "file": "P1升级方案_FF5与VaR.md",
+      "version": "v1.0",
+      "updated": "2026-05-09",
+      "type": "implementation",
+      "layer": ["L3_risk"],
+      "asset_scope": ["all"],
+      "tags": ["P1升级", "VaR", "CVaR", "FF5", "回测", "技术实施"],
+      "stages_provides": ["VaR/CVaR计算方案", "FF5回归方案", "实施检查清单"],
+      "dependencies": ["评分可解释性手册.md"],
+      "token_estimate": "~3,000",
+      "compiled_equivalent": "— 实施类SOP，需要时全量加载。"
+    },
+    {
+      "file": "HSTECH因子分析+四标修正_20260509.md",
+      "version": "v1.0",
+      "updated": "2026-05-09",
+      "type": "empirical_research",
+      "layer": ["L2"],
+      "asset_scope": ["恒生科技"],
+      "tags": ["HSTECH", "因子实证", "非对称暴露", "四象限", "36月回归"],
+      "stages_provides": ["HSTECH US暴露实证(正常15%/压力40%)", "四象限历史表现", "CN因子主导性验证"],
+      "dependencies": ["三层多因子投研框架.md", "评分可解释性手册.md"],
+      "token_estimate": "~3,000",
+      "compiled_equivalent": "sop/compiled/rules_L2.json (exposure_matrix section)"
+    },
+    {
+      "file": "ETF三标分析_20260505.md",
+      "version": "v1.0",
+      "updated": "2026-05-05",
+      "type": "empirical_research",
+      "layer": ["L2", "L3"],
+      "asset_scope": ["ETF"],
+      "tags": ["ETF分析", "技术指标", "三标"],
+      "stages_provides": ["ETF技术分析锚定", "三标分析模板"],
+      "dependencies": ["三层多因子投研框架.md"],
+      "token_estimate": "~2,000",
+      "compiled_equivalent": "— 可按需加载。分析模板已反映在scores_L3.schema.json中。"
+    }
+  ],
+  "sop_load_strategy": {
+    "daily_scoring": {
+      "primary": [
+        "sop/compiled/rules_L1.json",
+        "sop/compiled/rules_L2.json",
+        "sop/compiled/rules_L3.json",
+        "sop/compiled/weight_matrix.json",
+        "sop/compiled/position_map.json",
+        "sop/compiled/triggers.json",
+        "sop/compiled/data_source_map.json"
+      ],
+      "total_token_estimate": "~3,000",
+      "full_prose_if_ambiguous": ["sop/三层多因子投研框架.md", "sop/评分可解释性手册.md"]
+    },
+    "alert_evaluation": {
+      "primary": ["sop/compiled/triggers.json"],
+      "supplement": ["sop/compiled/data_source_map.json"]
+    },
+    "deep_research": {
+      "load_full": ["ai_investment_sop.md (11-stage workflow)", "relevant asset SOP (黄金/原油/加密)"]
+    },
+    "context_recovery": {
+      "primary": ["output/state/system_state.json", "sop/compiled/rules_L1.json"],
+      "supplement": ["sop/compiled/weight_matrix.json", "sop/compiled/triggers.json"]
+    }
+  },
+  "version_tracking_note": "When any SOP is updated, the corresponding compiled/*.json must be regenerated and _version field updated. The system_state.json must also record which SOP versions were in effect at each scoring."
+}

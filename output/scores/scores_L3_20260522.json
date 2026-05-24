@@ -1,0 +1,134 @@
+{
+  "timestamp": "2026-05-24T05:24:27Z",
+  "framework_version": "三层多因子投研框架 v1.4 + 评分可解释性手册 v1.1",
+  "sentiment": {
+    "indicators": [
+      {
+        "name": "vix",
+        "label": "VIX",
+        "value": 17.44,
+        "score": 3,
+        "scoring_rule": "17 ≤ VIX < 22 → 正常波动(3分)",
+        "data_source": "CBOE (via web_search)",
+        "trend": "improving",
+        "rationale": "VIX 17.44从4月高点60回落至正常区间, 市场恐慌消退但未到自满程度。"
+      },
+      {
+        "name": "put_call",
+        "label": "Put/Call",
+        "value": null,
+        "score": 3,
+        "scoring_rule": "无数据→中性3",
+        "data_source": "无",
+        "trend": "stable",
+        "rationale": "Put/Call比率数据未获取。"
+      },
+      {
+        "name": "aaii_survey",
+        "label": "AAII Bull-Bear",
+        "value": -11.9,
+        "score": 2,
+        "scoring_rule": "-20% ≤ spread < -10% → 悲观(2分)",
+        "data_source": "AAII Survey 5/20/2026",
+        "trend": "deteriorating",
+        "rationale": "AAII Bull-Bear Spread -11.9%, 散户整体偏悲观(逆向偏多信号)。从2.71%(前周)恶化至-11.9%, 悲观情绪大幅增加。"
+      },
+      {
+        "name": "dxy",
+        "label": "美元指数",
+        "value": 99.24,
+        "score": 4,
+        "scoring_rule": "走弱→+1, 对新兴市场有利",
+        "data_source": "WSJ + StreetStats",
+        "trend": "improving",
+        "rationale": "DXY 99.24, 短线走弱, 对EM/CN资产估值有利。从4月高点102回落至100以下。"
+      },
+      {
+        "name": "credit_spread",
+        "label": "信用利差",
+        "value": null,
+        "score": 3,
+        "scoring_rule": "无数据→中性3",
+        "data_source": "无",
+        "trend": "stable",
+        "rationale": "投资级OAS数据未获取。"
+      }
+    ],
+    "composite": 3.0
+  },
+  "risk": {
+    "indicators": [
+      {
+        "name": "var_95_1d",
+        "label": "VaR(95%,1d)",
+        "score": 4,
+        "scoring_rule": "ETF等权均值abs(VaR)≈1.97%, 1-2%→4分",
+        "data_source": "TickFlow日线→60日滚动模拟"
+      },
+      {
+        "name": "cvar_95_1d",
+        "label": "CVaR(95%,1d)",
+        "score": 4,
+        "scoring_rule": "ETF等权均值abs(CVaR)≈2.48%, <3%→4分",
+        "data_source": "TickFlow日线→60日滚动模拟"
+      },
+      {
+        "name": "max_drawdown_60d",
+        "label": "60日最大回撤",
+        "score": 4,
+        "scoring_rule": "ETF等权均值abs(DD)≈7.81%, 5-10%→4分",
+        "data_source": "TickFlow日线→滚动峰值计算"
+      },
+      {
+        "name": "var_trend",
+        "label": "VaR趋势",
+        "score": 3,
+        "scoring_rule": "159682改善(-1.6%), 159632+QQQ微扩(+1.9%/+3.6%), 均值约+1.3%→±5%稳定→3分",
+        "data_source": "VaR 20日vs40日均值"
+      }
+    ],
+    "per_asset": {
+      "159682.SZ": {
+        "ann_volatility": 30.98,
+        "sharpe_ratio": 2.9,
+        "var_daily_95pct": -2.34,
+        "var_daily_99pct": -2.88,
+        "cvar_daily_95pct": -2.75,
+        "max_dd_pct": -2.54,
+        "dd_60d_pct": -6.49,
+        "in_drawdown_now": false,
+        "var_trend_pct": -1.6,
+        "var_trend_direction": "improving"
+      },
+      "159632.SZ": {
+        "ann_volatility": 24.63,
+        "sharpe_ratio": 2.45,
+        "var_daily_95pct": -1.86,
+        "var_daily_99pct": -2.82,
+        "cvar_daily_95pct": -2.62,
+        "max_dd_pct": 0.0,
+        "dd_60d_pct": -8.35,
+        "in_drawdown_now": false,
+        "var_trend_pct": 1.9,
+        "var_trend_direction": "deteriorating"
+      },
+      "QQQ.US": {
+        "ann_volatility": 19.19,
+        "sharpe_ratio": 3.49,
+        "var_daily_95pct": -1.72,
+        "var_daily_99pct": -2.13,
+        "cvar_daily_95pct": -2.06,
+        "max_dd_pct": -0.31,
+        "dd_60d_pct": -8.59,
+        "in_drawdown_now": false,
+        "var_trend_pct": 3.6,
+        "var_trend_direction": "deteriorating"
+      }
+    },
+    "composite": 3.75
+  },
+  "composite": {
+    "value": 3.38
+  },
+  "assessment": "L3 3.38: 情绪中性(3.00)—VIX回归正常,AAII散户悲观(逆向偏多),DXY走弱利好。但Put/Call和信用利差无数据。风险偏优(3.75)—VaR/CVaR/回撤均处于可控区间。VaR趋势分化:创业板改善,纳指ETF+QQQ微扩。整体风险温和偏优。"
+}

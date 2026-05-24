@@ -1,0 +1,198 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://investment-assistant-os/schemas/scores_L1.schema.json",
+  "title": "L1 Macro Environment Scores",
+  "description": "Standardized L1 macro scoring output. US (5 factors, weight 0.60), CN (5 factors, weight 0.40). Each factor scored 1-5 with full explainability: raw data → mapping logic → score → rationale.",
+  "type": "object",
+  "required": ["timestamp", "us", "cn", "composite", "assessment"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Scoring timestamp"
+    },
+    "framework_version": {
+      "type": "string",
+      "description": "SOP version reference (e.g. 三层多因子投研框架 v1.4)"
+    },
+    "us": {
+      "type": "object",
+      "description": "US macro scoring (L1 US track, weight 0.60)",
+      "required": ["factors", "composite"],
+      "properties": {
+        "factors": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "description": "Five US macro factors in fixed order",
+          "items": {
+            "type": "object",
+            "required": ["name", "weight", "score", "data", "rationale"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": ["employment_growth", "inflation_wages", "monetary_policy", "financial_conditions", "geopolitical_risk"],
+                "description": "Factor identifier"
+              },
+              "label": {
+                "type": "string",
+                "description": "Human-readable label in Chinese",
+                "examples": ["就业/增长", "通胀/工资", "货币政策", "金融条件", "地缘冲击"]
+              },
+              "weight": {
+                "type": "number",
+                "description": "Factor weight within US (all equal 0.20)"
+              },
+              "score": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 5,
+                "description": "Factor score (1=worst, 5=best)"
+              },
+              "data": {
+                "type": "object",
+                "description": "Raw data points used to derive the score",
+                "required": ["indicators", "data_source"],
+                "properties": {
+                  "indicators": {
+                    "type": "object",
+                    "description": "Relevant indicator values at scoring time",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "value": { "type": "number" },
+                        "unit": { "type": "string" },
+                        "reference": { "type": "string", "description": "Comparison reference (e.g. expected, prior month)" }
+                      }
+                    }
+                  },
+                  "data_source": {
+                    "type": "string",
+                    "description": "Data source institution + API"
+                  }
+                }
+              },
+              "scoring_method": {
+                "type": "string",
+                "description": "How the score was derived from raw data (mapping rule)"
+              },
+              "rationale": {
+                "type": "string",
+                "description": "Why this score, not higher/lower. Key qualitative judgment."
+              }
+            }
+          }
+        },
+        "composite": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "US L1 composite = average of 5 factors × weight"
+        }
+      }
+    },
+    "cn": {
+      "type": "object",
+      "description": "CN macro scoring (L1 CN track, weight 0.40)",
+      "required": ["factors", "composite"],
+      "properties": {
+        "factors": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["name", "weight", "score", "data", "rationale"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": ["manufacturing", "consumption", "credit", "real_estate", "policy"],
+                "description": "Factor identifier"
+              },
+              "label": {
+                "type": "string",
+                "description": "Human-readable label",
+                "examples": ["制造业", "消费", "信贷", "房地产", "政策"]
+              },
+              "weight": { "type": "number" },
+              "score": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "data": {
+                "type": "object",
+                "required": ["indicators", "data_source"],
+                "properties": {
+                  "indicators": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "value": { "type": "number" },
+                        "unit": { "type": "string" },
+                        "reference": { "type": "string" }
+                      }
+                    }
+                  },
+                  "data_source": { "type": "string" }
+                }
+              },
+              "scoring_method": { "type": "string" },
+              "rationale": {
+                "type": "string",
+                "description": "Why this score, qualitative context"
+              }
+            }
+          }
+        },
+        "composite": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "CN L1 composite = average of 5 factors × weight"
+        }
+      }
+    },
+    "composite": {
+      "type": "object",
+      "description": "L1 final composite = US×0.60 + CN×0.40",
+      "required": ["value", "weights"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "L1 composite score"
+        },
+        "weights": {
+          "type": "object",
+          "properties": {
+            "us": {
+              "type": "number",
+              "const": 0.60,
+              "description": "US weight in L1 composite"
+            },
+            "cn": {
+              "type": "number",
+              "const": 0.40,
+              "description": "CN weight in L1 composite"
+            }
+          }
+        }
+      }
+    },
+    "assessment": {
+      "type": "string",
+      "description": "Narrative synthesis: macro stance in one sentence, key concerns, implication for positioning"
+    },
+    "jp_reference": {
+      "type": "object",
+      "description": "Optional JP-L1 reference score (weight 0.15 in 3-track model but currently simplified)",
+      "properties": {
+        "score": { "type": "number", "minimum": 1, "maximum": 5 },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

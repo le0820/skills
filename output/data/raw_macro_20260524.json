@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-05-24T05:53:54.235415Z",
+  "data_date": "20260524",
+  "pmi_mfg": 50.3,
+  "pmi_non_mfg": 49.4,
+  "cpi_yoy": 1.2,
+  "ppi_yoy": 2.8,
+  "m2_yoy": 8.6,
+  "m1_yoy": 5.0,
+  "tsf_monthly": 22075.0,
+  "retail_sales_yoy": 0.2,
+  "lpr_1y": 3.0,
+  "lpr_5y": 3.5,
+  "industrial_output_yoy": null,
+  "_errors": []
+}

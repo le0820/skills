@@ -1,0 +1,101 @@
+{
+  "_description": "Data Source Mapping — which data source provides each metric. Compiled from 投研分析师标准化业务流程 + README §4 + all SOP data sections. Includes cross-validation rules and data quality thresholds.",
+  "_version": "compiled-2026-05-24",
+  "_source": "sop/投研分析师标准化业务流程.md (§数据使用优先级)",
+  "priority_hierarchy": {
+    "market_data": { "primary": "TickFlow", "verification": "qveris", "tolerance": "0.5%" },
+    "financial_data": { "primary": "TickFlow", "verification": "qveris", "tolerance": "1.0%" },
+    "commodity_futures": { "primary": "TickFlow", "verification": "qveris", "tolerance": "0.3%" },
+    "macro_data": { "primary": "qveris", "verification": "none (official publisher annotation)", "note": "标注官方发布机构" }
+  },
+  "metrics_map": {
+    "US Macro": {
+      "nonfarm_payroll": { "primary": "qveris", "publisher": "BLS", "fetch": "qveris macro --indicators nonfarm" },
+      "unemployment_rate": { "primary": "qveris", "publisher": "BLS" },
+      "cpi_yoy": { "primary": "qveris", "publisher": "BLS" },
+      "core_pce_yoy": { "primary": "qveris", "publisher": "BEA" },
+      "fed_rate": { "primary": "qveris", "publisher": "Federal Reserve" },
+      "ust_2y": { "primary": "FMP", "backup": "qveris" },
+      "ust_10y": { "primary": "FMP", "backup": "qveris" },
+      "ust_30y": { "primary": "FMP", "backup": "qveris" },
+      "tips_10y": { "primary": "FMP", "backup": "qveris" },
+      "dxy": { "primary": "TickFlow", "backup": "qveris" },
+      "vix": { "primary": "web_search", "backup": "FMP" },
+      "spx_level": { "primary": "TickFlow" },
+      "credit_spread_ig": { "primary": "FMP", "backup": "web_search" },
+      "private_credit_default_rate": { "primary": "web_search" },
+      "gdp_growth": { "primary": "qveris", "publisher": "BEA" },
+      "ism_mfg": { "primary": "qveris", "publisher": "ISM" }
+    },
+    "CN Macro": {
+      "pmi_mfg": { "primary": "qveris", "publisher": "NBS" },
+      "pmi_caixin_mfg": { "primary": "qveris", "publisher": "Caixin/Markit" },
+      "cpi_yoy": { "primary": "qveris", "publisher": "NBS" },
+      "ppi_yoy": { "primary": "qveris", "publisher": "NBS" },
+      "m2_yoy": { "primary": "qveris", "publisher": "PBOC" },
+      "tsf_flow": { "primary": "qveris", "publisher": "PBOC" },
+      "lpr_1y": { "primary": "qveris", "publisher": "PBOC" },
+      "retail_sales_yoy": { "primary": "qveris", "publisher": "NBS" },
+      "industrial_output_yoy": { "primary": "qveris", "publisher": "NBS" },
+      "fixed_investment_yoy": { "primary": "qveris", "publisher": "NBS" },
+      "exports_yoy": { "primary": "qveris", "publisher": "海关总署" },
+      "new_home_price_yoy": { "primary": "qveris", "publisher": "CIA" },
+      "second_hand_price_yoy": { "primary": "qveris", "publisher": "CIA" },
+      "usdcny": { "primary": "TickFlow" },
+      "southbound_flow": { "primary": "cn_financial_pro", "note": "⚠️ 需TickFlow或Wind获取日度数据" },
+      "northbound_flow": { "primary": "cn_financial_pro", "note": "⚠️ 同上" },
+      "margin_balance": { "primary": "cn_financial_pro" }
+    },
+    "JP Macro": {
+      "jgb_10y": { "primary": "FMP" },
+      "usdjpy": { "primary": "TickFlow" }
+    },
+    "Commodity": {
+      "brent_price": { "primary": "TickFlow", "method": "ak.futures_foreign_hist('OIL')" },
+      "wti_price": { "primary": "TickFlow", "method": "ak.futures_foreign_hist('CL')" },
+      "gold_price": { "primary": "TickFlow" },
+      "gold_oil_ratio": { "primary": "compute", "method": "MacroData.get_gold_oil_ratio()" }
+    },
+    "ETF Market": {
+      "price_ohlcv": { "primary": "TickFlow", "verification": "qveris", "tolerance": "0.5%" },
+      "kline_data": { "primary": "TickFlow", "verification": "qveris" },
+      "financial_data": { "primary": "TickFlow", "verification": "qveris", "tolerance": "1.0%" },
+      "technical_indicators": { "primary": "compute", "source_data": "TickFlow日线" },
+      "valuation": { "primary": "TickFlow", "verification": "qveris" },
+      "fund_flows": { "primary": "cn_financial_pro", "backup": "TickFlow" },
+      "premium_rate": { "primary": "cn_financial_pro" }
+    },
+    "Factor Regression": {
+      "US_FF5_factors": { "primary": "compute (Python)", "data_source": "TickFlow日线 + K.French library" },
+      "CN_FF_factors": { "primary": "compute (Python)", "data_source": "TickFlow日线 + PBOC信贷数据" },
+      "per_etf_loadings": { "primary": "compute (OLS regression)", "output": "scores_L2.schema.json" }
+    },
+    "Quantitative Risk": {
+      "var_cvar": { "primary": "compute (Python)", "method": "60日滚动历史模拟", "data_source": "TickFlow日线" },
+      "max_drawdown": { "primary": "compute (Python)", "data_source": "TickFlow日线" },
+      "var_trend": { "primary": "compute (Python)", "data_source": "VaR时间序列" }
+    },
+    "Sentiment": {
+      "aaii_survey": { "primary": "web_search", "publisher": "AAII" },
+      "put_call": { "primary": "web_search", "publisher": "CBOE/OptionCharts" }
+    },
+    "News & Research": {
+      "company_news": { "primary": "web_search" },
+      "analyst_reports": { "primary": "web_search" },
+      "pdf_parsing": { "primary": "mineru-pdf-parser", "note": "用于解析上市公司业绩报告PDF" }
+    }
+  },
+  "ticker_code_format": {
+    "A股上海": "CODE.SH (e.g. 600000.SH)",
+    "A股深圳": "CODE.SZ (e.g. 000001.SZ)",
+    "港股": "CODE.HK (e.g. 0700.HK)",
+    "美股": "CODE.US (e.g. AAPL.US)",
+    "国内期货": "CODE.SHF (e.g. au2606.SHF)"
+  },
+  "degradation_rules": {
+    "TickFlow_unavailable": "临时使用Qveris, 标注「临时数据源」; TickFlow恢复后重新验证修正",
+    "data_diff_exceeds_tolerance": "核查标的代码、查询周期、复权方式; 仍有差异以TickFlow为准",
+    "unable_to_determine_accuracy": "同时披露两份数据源结果并说明差异, 由用户自行判断",
+    "verification_not_possible": "标注数据源为「未交叉验证」, 风险提示"
+  }
+}
