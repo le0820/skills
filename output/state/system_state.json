@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-24T05:53:32Z",
+  "timestamp": "2026-05-24T13:53:00Z",
   "scores": {
     "composite": 2.93,
     "L1": 2.96,
@@ -12,42 +12,60 @@
         "previous": 3.14,
         "current": 2.93,
         "change": -0.21,
-        "note": "从3.0-3.5区间降至2.5-3.0区间，L2(3.08 vs 3.40)和L3(2.75 vs 3.38)双双拉低。L1改善+0.20但不足以抵消"
+        "note": "从3.0-3.5区间降至2.5-3.0区间"
       },
       {
         "layer": "L2",
         "previous": 3.40,
         "current": 3.08,
         "change": -0.32,
-        "note": "FF5信号更保守，多数CN ETF不显著回中性3，QQQ偏成长/低盈利拖累"
+        "note": "FF5信号更保守，多数CN ETF不显著回中性3"
       },
       {
         "layer": "L3",
         "previous": 3.38,
         "current": 2.75,
         "change": -0.63,
-        "note": "AAII散户情绪从乐观急转悲观(-11.9% spread)，VaR趋势QQQ扩大+7%"
+        "note": "AAII散户情绪从乐观急转悲观，VaR趋势QQQ扩大+7%"
       }
     ]
   },
   "position": {
     "band_label": "中性偏保守",
     "central_pct": 45,
-    "current_actual_pct": 55.7,
+    "current_actual_pct": 56.9,
+    "accounts": {
+      "证券账户": { "total": 30082.80, "cash": 19288.80, "position_pct": 35.9 },
+      "场外基金": { "total": 14670.14, "other": 2954.82, "position_pct": 79.9 }
+    },
     "per_asset": {
       "159682.SZ": {
         "name": "创业板50ETF景顺",
-        "weight_pct": 40.0,
+        "account": "证券账户",
+        "market_value": 7736.40,
+        "weight_pct_total": 17.3,
         "cost_basis": 1.686,
         "current_price": 1.842,
         "unrealized_pnl_pct": 9.25
       },
       "159632.SZ": {
         "name": "纳斯达克ETF华安",
-        "weight_pct": 15.7,
+        "account": "证券账户",
+        "market_value": 3057.60,
+        "weight_pct_total": 6.8,
         "cost_basis": 2.318,
         "current_price": 2.352,
         "unrealized_pnl_pct": 1.47
+      },
+      "515450（场外）": {
+        "name": "南方红利低波50ETF联接A（场外）",
+        "account": "场外基金",
+        "market_value": 11715.32,
+        "weight_pct_total": 26.2,
+        "cost_basis": null,
+        "current_price": null,
+        "unrealized_pnl_pct": null,
+        "note": "小幅浮亏"
       }
     }
   },
@@ -83,7 +101,7 @@
     "p1_upgrade": "v1.0",
     "analyst_workflow": "v1.0"
   },
-  "narrative_context": "L1 2.96(改善) vs L2 3.08 + L3 2.75(偏弱) → 综合2.93中性偏保守。核心矛盾未变：NVDA AI超级周期 vs 通胀粘性+30Y>5%+油价$104。5/28 PCE关键枢轴。当前55.7%仓位高于中枢45%需减仓。",
+  "narrative_context": "L1 2.96/L2 3.08/L3 2.75→综合2.93中性偏保守。全账户56.9%仓位略高于中枢45%。证券35.9%+场外基金合计场内有票。5/28 PCE关键枢轴。",
   "next_scheduled": {
     "next_macro_update": "2026-05-28T00:00:00Z",
     "next_market_scan": "2026-05-24T05:53:32Z",
