@@ -1,10 +1,16 @@
 {
-  "timestamp": "2026-05-24T13:53:00Z",
+  "timestamp": "2026-05-25T01:30:00Z",
   "scores": {
     "composite": 2.93,
     "L1": 2.96,
     "L2": 3.08,
     "L3": 2.75,
+    "provisional_monday_adjustment": {
+      "L1_us_inflation": "倾向改善(油价$95.63-$105,通胀预期下行待核心PCE确认)",
+      "L1_us_financial": "维持4(DXY走弱+利率微降正面,金油比47.8矛盾负面)",
+      "L1_estimated": "3.02-3.10(若油价维持$95可上调至3.20-3.30)",
+      "composite_estimated": "2.90-3.05(PCE出方向前宽幅区间)"
+    },
     "last_updated": "2026-05-24T05:53:32Z",
     "deterioration_alerts": [
       {
@@ -77,10 +83,20 @@
         "trigger_id": 1,
         "level": "red",
         "since": "2026-05-19T00:00:00Z",
-        "last_push": "2026-05-24T05:53:32Z",
+        "last_push": "2026-05-25T01:30:00Z",
         "condition": "30Y UST > 5.0%",
-        "current_value": 5.07,
-        "action": "大幅减仓高久期资产，增配短债/现金。30Y已从5.19%回落，但仍在>5%警戒"
+        "current_value": 5.063,
+        "action": "30Y 5.063%仍在>5%警戒但较5.19%大幅回落。距阈值仅6bp，追踪跌破信号"
+      },
+      {
+        "alert_id": "gold_oil_ratio_20260525",
+        "trigger_id": "cross_validation",
+        "level": "blue",
+        "since": "2026-05-25T01:30:00Z",
+        "last_push": "2026-05-25T01:30:00Z",
+        "condition": "金油比>25 + 预计VIX<20 → 矛盾信号，预判风险",
+        "current_value": 47.8,
+        "action": "金油比47.8为阈值25的1.9倍。虽未直接兑现风险，但需紧密监控风险偏好变化"
       }
     ],
     "drawdown_watch": {
@@ -101,10 +117,11 @@
     "p1_upgrade": "v1.0",
     "analyst_workflow": "v1.0"
   },
-  "narrative_context": "L1 2.96/L2 3.08/L3 2.75→综合2.93中性偏保守。全账户56.9%仓位略高于中枢45%。证券35.9%+场外基金合计场内有票。5/28 PCE关键枢轴。",
+  "narrative_context": "周一早盘: Brent暴跌至$95.63(-8.3%),通胀约束大幅松动但金油比47.8触发矛盾信号。30Y 5.063%距5.0仅6bp。5/28 PCE关键枢轴。当前56.9%仓位需逐步调至45-50%。",
   "next_scheduled": {
     "next_macro_update": "2026-05-28T00:00:00Z",
-    "next_market_scan": "2026-05-24T05:53:32Z",
+    "next_market_scan": "2026-05-25T01:30:00Z",
+    "next_weekly_guidance": "2026-05-25T01:30:00Z",
     "next_data_release": {
       "date": "2026-05-28",
       "event": "4月PCE + Q1 GDP修正",
