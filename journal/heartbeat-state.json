@@ -1,0 +1,29 @@
+{
+  "lastChecks": {
+    "trigger1_30y": 1748791218,
+    "trigger2_vix": 1748791218,
+    "trigger3_drawdown": 1748791218,
+    "trigger4_brent": 1748791218,
+    "trigger5_spx_ma200": 1748791218,
+    "trigger6_yield_curve": 1748791218,
+    "trigger7_cn_pmi": 1748791218,
+    "trigger8_159632_premium": 1748791218,
+    "trigger9_cnus_spread": 1748791218,
+    "trigger10_vix_complacency": 1748791218,
+    "trigger11_159682": 1748791218,
+    "trigger12_qqq10": 1748791218,
+    "trigger13_qqq15": 1748791218,
+    "trigger14_cpi_30y": 1748791218,
+    "trigger15_159632_premium_low": 1748791218
+  },
+  "lastPushed": {
+    "trigger1": 1747371600,
+    "yellow_warning": null
+  },
+  "trigger1_active": true,
+  "trigger1_first_seen": "2026-05-15",
+  "trigger1_current_value": "5.00%",
+  "daily_yellow_count": 0,
+  "last_daily_scoring": "2026-06-01T15:20:00Z",
+  "composite_score": 2.74
+}
