@@ -1,7 +1,7 @@
 {
   "plan_name": "信号定投计划（替代月供定投）",
   "created_at": "2026-06-04T08:50:00Z",
-  "last_updated": "2026-06-04T08:50:00Z",
+  "last_updated": "2026-06-04T09:10:00Z",
   "base_assumptions": {
     "total_capital": 40000,
     "monthly_income": 6000,
@@ -25,10 +25,20 @@
       "total_position_min_pct": 35
     },
     "signal_priority_order": [
-      "RSI<40 (最优先，回测验证最佳择时信号)",
-      "回踩MA20 (次优先，等权替代方案)"
+      "RSI(14)<40 (主信号，侧重频率而非极致折扣)",
+      "回踩MA20 (备用，RSI未触发时替代)"
     ],
-    "backtest_reference": "2023-01至2026-06回测: RSI<40均收益+127.66%,回踩MA20均收益+102.57%"
+    "signal_selection_rationale": {
+      "adopted": "RSI(14)<40",
+      "rejected": "RSI(24)<30",
+      "reason": "RSI(24)<30在AI上行周期中触发频率过低(159682仅16次/5年,QQQ仅2次/3年),可能错过AI行情下半场;RSI(14)<40触发频率3倍于RSI24(-5~-11%折扣vs-17~-22%),折扣虽小但不会踏空",
+      "cross_etf_validation": {
+        "159682": {"trigger_count": 45, "avg_discount": "-11.1%", "avg_return": "+130.99%"},
+        "512760": {"trigger_count": 69, "avg_discount": "-5.6%", "avg_return": "+123.10%"},
+        "QQQ":     {"trigger_count": 30, "avg_discount": "-0.5%", "avg_return": "+49.34%"}
+      }
+    },
+    "backtest_reference": "详见scripts/strategies/backtest/""
   },
   "current_position": {
     "159682": { "shares": 4200, "cost_basis": 1.774, "market_value": 8182, "weight_pct": 18.4, "status": "异常低配(误操作减仓2,500股)" },
@@ -51,8 +61,8 @@
   "signal_triggers": [
     {
       "signal_id": "SIG_01",
-      "name": "RSI<40 — 159682",
-      "condition": "easy-tdx RSI(14) < 40 for 159682.SZ (日线收盘)",
+      "name": "RSI(14)<40 — 159682",
+      "condition": "RSI(14) < 40 for 159682.SZ (日线收盘,从上方跌破)",
       "action": "买入¥3,000等值159682份额",
       "max_triggers": 3,
       "triggered_count": 0,
@@ -60,7 +70,7 @@
     },
     {
       "signal_id": "SIG_02",
-      "name": "RSI<40 — 159632",
+      "name": "RSI(14)<40 — 159632",
       "condition": "RSI(14) < 40 for 159632.SZ (纳指ETF)",
       "action": "买入¥2,500等值159632份额",
       "max_triggers": 3,
@@ -69,7 +79,7 @@
     },
     {
       "signal_id": "SIG_03",
-      "name": "RSI<40 — 512760",
+      "name": "RSI(14)<40 — 512760",
       "condition": "RSI(14) < 40 for 512760.SH",
       "action": "买入¥2,000等值512760份额",
       "max_triggers": 3,
@@ -80,7 +90,7 @@
       "signal_id": "SIG_04",
       "name": "回踩MA20 — 159682",
       "condition": "收盘价跌破MA20 for 159682.SZ",
-      "action": "买入¥2,000等值159682份额 (RSI<40未触发时的替代)",
+      "action": "买入¥2,000等值159682份额 (RSI(14)<40未触发时的替代)",
       "max_triggers": 2,
       "triggered_count": 0,
       "pending": true
@@ -89,7 +99,7 @@
       "signal_id": "SIG_05",
       "name": "回踩MA20 — 159632",
       "condition": "收盘价跌破MA20 for 159632.SZ",
-      "action": "买入¥1,500等值159632份额 (RSI<40替代)",
+      "action": "买入¥1,500等值159632份额 (RSI(14)<40替代)",
       "max_triggers": 2,
       "triggered_count": 0,
       "pending": true
@@ -98,7 +108,7 @@
       "signal_id": "SIG_06",
       "name": "回踩MA20 — 512760",
       "condition": "收盘价跌破MA20 for 512760.SH",
-      "action": "买入¥1,500等值512760份额 (RSI<40替代)",
+      "action": "买入¥1,500等值512760份额 (RSI(14)<40替代)",
       "max_triggers": 2,
       "triggered_count": 0,
       "pending": true
@@ -115,8 +125,8 @@
     },
     {
       "signal_id": "SIG_08",
-      "name": "159682 DCA恢复——RSI<40信号触发后补仓",
-      "condition": "159682的RSI<40触发 + 总仓位≤50%",
+      "name": "159682 DCA恢复——RSI(14)<40信号触发后补仓",
+      "condition": "159682的RSI(14)<40触发 + 总仓位≤50%",
       "action": "追加买入¥3,000 (信号触发后)",
       "max_triggers": 2,
       "triggered_count": 0,
@@ -127,13 +137,13 @@
     "type": "trim_and_prepare",
     "actions": [
       { "ticker": "513130", "action": "卖出1,000股~@0.629", "reason": "超限11.3%→9.9%", "value_est": 629 },
-      { "ticker": "Wait", "action": "等待信号触发", "reason": "RSI<40/回踩MA20均未触发, 耐心等待" }
+      { "ticker": "Wait", "action": "等待信号触发", "reason": "RSI(14)<40/回踩MA20均未触发, 耐心等待" }
     ]
   },
   "daily_monitoring": {
     "check_frequency": "每日评分更新时检查RSI(14)",
-    "check_tool": "easy-tdx MacClient get_stock_kline with indicator RSI",
-    "rsi_sources": "run_scoring.py已内置RSI(14)计算,输出在scores_L3_*.json",
+    "check_tool": "easy-tdx日线CSV → run_scoring.py内置RSI(14)计算,输出scores_L3_*.json",
+    "rsi_threshold": 40,
     "current_rsi_status": {
       "159682": {"rsi_14": "待检查", "signal": "未触发"},
       "159632": {"rsi_14": "待检查", "signal": "未触发"},
@@ -164,15 +174,16 @@
     },
     "512760_rsi_trigger": {
       "importance": "medium",
-      "description": "512760 RSI<40触发",
+      "description": "512760 RSI(14)<40触发",
       "action": "执行SIG_03买入¥2,000,同时评估是否触发SIG_06备用"
     }
   },
   "notes": [
-    "从月供定投改为信号定投——只在RSI<40或回踩MA20触发时买入",
+    "信号选择: RSI(14)<40为主信号,RSI(24)<30因触发频率过低被否决(可能踏空AI下半场)",
+    "从月供定投改为信号定投——只在RSI(14)<40或回踩MA20触发时买入",
     "月收入¥6,000中的¥5,000预留为信号预备金,非自动定投",
-    "每当信号触发但此时预算已用完,则跳过该次(不做债务买入)",
-    "回踩MA20是RSI<40未触发时的替代方案,金额略低(¥2,000 vs ¥3,000)",
+    "每当信号触发但预算已用完,则跳过该次(不做债务买入)",
+    "回踩MA20是RSI(14)<40未触发时的替代方案,金额略低(¥2,000 vs ¥3,000)",
     "信号预算¥15,000,按最坏预期3次RSI+2次回踩合计约¥22,000,多出的由月收入补充",
     "512760新纳入:总预算¥6,000,分3次信号执行(每次¥2,000)"
   ]
