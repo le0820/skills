@@ -36,17 +36,26 @@ schemas/.schema.json               ← 输出 JSON 格式校验时
 
 ### 1.0 一键数据管线（推荐）
 
+**数据源**: ✅ `easy-tdx` 统一接口（已替换 TickFlow）
+- A 股 ETF/指数 → `MacClient`
+- 港/美股（QQQ 等）→ `MacExClient(goods_kline)`
+- 统一列名：`trade_date` / `open` / `high` / `low` / `close` / `vol` / `amount`
+
 ```bash
 # Step A: ETF 日线数据 → /tmp/
-cd repo_skills/skills/tickflow/python
-uv run python ../../../scripts/pipeline/fetch_etf_data.py --days=500
+cd repo_skills/scripts/pipeline
+uv run python fetch_etf_data.py --days=500
 
 # Step B: CN 宏观数据 → output/data/raw_macro_{date}.json
 cd repo_skills/scripts/pipeline
 uv run python fetch_macro.py
+
+# Step C: 全量评分（Phase 2 自动化）
+cd repo_skills/scripts/pipeline
+uv run python run_scoring.py
 ```
 
-如果上述两步均成功，则 `/tmp/` 下有所有 ETF 和指数的 CSV，`output/data/` 下有宏观 JSON。
+如果 Step A 成功，则 `/tmp/` 下有所有 ETF 和指数的 CSV（列名: `trade_date`）；`output/data/` 下有宏观 JSON 和评分 JSON。
 
 ### 1.1 补充 web_search 指标（管线未覆盖）
 
@@ -75,6 +84,8 @@ uv run python cn_ff_regression.py
 输出文件（自动日期命名）：
 - `~/.openclaw/workspace/analysis/p1_upgrade_results_{YYYYMMDD}.json`
 - `~/.openclaw/workspace/analysis/cn_ff_results_{YYYYMMDD}.json`
+
+**注意**: p1_upgrade/cn_ff_regression 仍读 `/tmp/*_daily.csv`，这些 CSV 现在由 easy-tdx 生成而非 TickFlow，但列名格式兼容。
 
 p1_upgrade JSON 包含的字段：`individual.{ticker}.var`（VaR/CVaR/趋势）、`drawdown`（回撤/恢复天数）、`momentum`（1/3/6/12月收益）、`ff5_loadings`（α + 5因子β + t-stats + R²）、`l3_risk_scores`（1-5）、`l2_scores`（基于β的风格评分）
 

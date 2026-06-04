@@ -27,6 +27,7 @@ etfs = {
     '513130.SH': {'name': '恒生科技ETF', 'file': '/tmp/513130_SH_daily.csv'},
     '513310.SH': {'name': '中韩半导体ETF', 'file': '/tmp/513310_SH_daily.csv'},
     '159682.SZ': {'name': '创业板50ETF', 'file': '/tmp/159682_SZ_daily.csv'},
+    '512760.SH': {'name': '芯片ETF国泰', 'file': '/tmp/512760_SH_daily.csv'},
 }
 
 # Load indices

@@ -1,0 +1,179 @@
+{
+  "plan_name": "信号定投计划（替代月供定投）",
+  "created_at": "2026-06-04T08:50:00Z",
+  "last_updated": "2026-06-04T08:50:00Z",
+  "base_assumptions": {
+    "total_capital": 40000,
+    "monthly_income": 6000,
+    "composite_score": 2.92,
+    "position_band": "中性偏保守",
+    "position_range": "35-50%",
+    "position_central_pct": 45,
+    "prices_source": "2026-06-04收盘",
+    "prices": {
+      "159682": 1.948,
+      "159632": 2.532,
+      "513130": 0.629,
+      "512760": 1.180
+    },
+    "framework_limits": {
+      "159682": { "max_pct": 35, "source": "单资产2x规则(CN侧)" },
+      "159632": { "max_pct": 30, "source": "单资产2x规则(US侧)" },
+      "513130": { "max_pct": 10, "source": "US↑CN↓象限上限" },
+      "512760": { "max_pct": 10, "source": "新纳入，高波动上限" },
+      "total_position_max_pct": 50,
+      "total_position_min_pct": 35
+    },
+    "signal_priority_order": [
+      "RSI<40 (最优先，回测验证最佳择时信号)",
+      "回踩MA20 (次优先，等权替代方案)"
+    ],
+    "backtest_reference": "2023-01至2026-06回测: RSI<40均收益+127.66%,回踩MA20均收益+102.57%"
+  },
+  "current_position": {
+    "159682": { "shares": 4200, "cost_basis": 1.774, "market_value": 8182, "weight_pct": 18.4, "status": "异常低配(误操作减仓2,500股)" },
+    "159632": { "shares": 1300, "cost_basis": 2.318, "market_value": 3292, "weight_pct": 7.4, "status": "极度低配" },
+    "513130": { "shares": 8000, "cost_basis": 0.619, "market_value": 5032, "weight_pct": 11.3, "status": "超限" },
+    "512760": { "shares": 0, "market_value": 0, "weight_pct": 0, "status": "未持仓，最大10%" },
+    "cash": { "market_value": 23420, "weight_pct": 52.6 },
+    "total_position_pct": 37.1,
+    "total_assets": 44426
+  },
+  "signal_budget_allocation": {
+    "total_cash_reserve_for_signals": 15000,
+    "per_signal_allocation": {
+      "159682": { "max_per_trigger": 3000, "total_budget": 9000, "note": "补4500股(目标6000股)需~¥11,700" },
+      "159632": { "max_per_trigger": 2500, "total_budget": 7500, "note": "补1700股(目标3000股)需~¥4,300" },
+      "512760": { "max_per_trigger": 2000, "total_budget": 6000, "note": "建仓目标10%=¥4,400需~3,700份@¥1.18" },
+      "513130": { "max_per_trigger": 0, "total_budget": 0, "note": "当前超限11.3%,需先减持至≤10%后再考虑" }
+    }
+  },
+  "signal_triggers": [
+    {
+      "signal_id": "SIG_01",
+      "name": "RSI<40 — 159682",
+      "condition": "easy-tdx RSI(14) < 40 for 159682.SZ (日线收盘)",
+      "action": "买入¥3,000等值159682份额",
+      "max_triggers": 3,
+      "triggered_count": 0,
+      "pending": true
+    },
+    {
+      "signal_id": "SIG_02",
+      "name": "RSI<40 — 159632",
+      "condition": "RSI(14) < 40 for 159632.SZ (纳指ETF)",
+      "action": "买入¥2,500等值159632份额",
+      "max_triggers": 3,
+      "triggered_count": 0,
+      "pending": true
+    },
+    {
+      "signal_id": "SIG_03",
+      "name": "RSI<40 — 512760",
+      "condition": "RSI(14) < 40 for 512760.SH",
+      "action": "买入¥2,000等值512760份额",
+      "max_triggers": 3,
+      "triggered_count": 0,
+      "pending": true
+    },
+    {
+      "signal_id": "SIG_04",
+      "name": "回踩MA20 — 159682",
+      "condition": "收盘价跌破MA20 for 159682.SZ",
+      "action": "买入¥2,000等值159682份额 (RSI<40未触发时的替代)",
+      "max_triggers": 2,
+      "triggered_count": 0,
+      "pending": true
+    },
+    {
+      "signal_id": "SIG_05",
+      "name": "回踩MA20 — 159632",
+      "condition": "收盘价跌破MA20 for 159632.SZ",
+      "action": "买入¥1,500等值159632份额 (RSI<40替代)",
+      "max_triggers": 2,
+      "triggered_count": 0,
+      "pending": true
+    },
+    {
+      "signal_id": "SIG_06",
+      "name": "回踩MA20 — 512760",
+      "condition": "收盘价跌破MA20 for 512760.SH",
+      "action": "买入¥1,500等值512760份额 (RSI<40替代)",
+      "max_triggers": 2,
+      "triggered_count": 0,
+      "pending": true
+    },
+    {
+      "signal_id": "SIG_07",
+      "name": "513130减持信号",
+      "condition": "513130仓位超10%时触发",
+      "action": "卖出持仓至约10% (当前超限，已触发)",
+      "type": "sell",
+      "triggered_count": 1,
+      "pending": false,
+      "note": "需卖出约1,000股(8,000→7,000股)"
+    },
+    {
+      "signal_id": "SIG_08",
+      "name": "159682 DCA恢复——RSI<40信号触发后补仓",
+      "condition": "159682的RSI<40触发 + 总仓位≤50%",
+      "action": "追加买入¥3,000 (信号触发后)",
+      "max_triggers": 2,
+      "triggered_count": 0,
+      "pending": true
+    }
+  ],
+  "immediate_action": {
+    "type": "trim_and_prepare",
+    "actions": [
+      { "ticker": "513130", "action": "卖出1,000股~@0.629", "reason": "超限11.3%→9.9%", "value_est": 629 },
+      { "ticker": "Wait", "action": "等待信号触发", "reason": "RSI<40/回踩MA20均未触发, 耐心等待" }
+    ]
+  },
+  "daily_monitoring": {
+    "check_frequency": "每日评分更新时检查RSI(14)",
+    "check_tool": "easy-tdx MacClient get_stock_kline with indicator RSI",
+    "rsi_sources": "run_scoring.py已内置RSI(14)计算,输出在scores_L3_*.json",
+    "current_rsi_status": {
+      "159682": {"rsi_14": "待检查", "signal": "未触发"},
+      "159632": {"rsi_14": "待检查", "signal": "未触发"},
+      "513130": {"rsi_14": "待检查", "signal": "未触发"},
+      "512760": {"rsi_14": "待检查", "signal": "未触发"}
+    }
+  },
+  "rebalance_triggers": {
+    "nonfarm_june5": {
+      "importance": "high",
+      "description": "6/5 5月非农(共识95K)",
+      "action_if_strong": "159632可提前执行RSI<40买入(即使未触发)"
+    },
+    "cpi_june10": {
+      "importance": "high",
+      "description": "6/10-13 5月CPI",
+      "action_if_soft": "信号买入金额可追加1,000-2,000"
+    },
+    "score_above_3_0": {
+      "importance": "medium",
+      "description": "总评分≥3.0放宽仓位上限",
+      "action": "信号买入金额可增加50%"
+    },
+    "score_below_2_5": {
+      "importance": "high",
+      "description": "评分<2.5收缩防御",
+      "action": "暂停所有信号买入,考虑减持"
+    },
+    "512760_rsi_trigger": {
+      "importance": "medium",
+      "description": "512760 RSI<40触发",
+      "action": "执行SIG_03买入¥2,000,同时评估是否触发SIG_06备用"
+    }
+  },
+  "notes": [
+    "从月供定投改为信号定投——只在RSI<40或回踩MA20触发时买入",
+    "月收入¥6,000中的¥5,000预留为信号预备金,非自动定投",
+    "每当信号触发但此时预算已用完,则跳过该次(不做债务买入)",
+    "回踩MA20是RSI<40未触发时的替代方案,金额略低(¥2,000 vs ¥3,000)",
+    "信号预算¥15,000,按最坏预期3次RSI+2次回踩合计约¥22,000,多出的由月收入补充",
+    "512760新纳入:总预算¥6,000,分3次信号执行(每次¥2,000)"
+  ]
+}
