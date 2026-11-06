@@ -1,0 +1,49 @@
+schema_version = 1
+
+[project]
+id = "finance"
+hub_version = "hub-v1"
+description = "Shared memory and MCP service entrypoint"
+
+[hub]
+host = "127.0.0.1"
+port_candidates = [8791, 8792, 8793]
+startup_timeout_seconds = 180
+tool_call_timeout_seconds = 150
+idle_shutdown_seconds = 0
+discovery_timeout_seconds = 90
+
+# Configure local paths and authentication before enabling an upstream.
+[services.openbb]
+enabled = false
+kind = "mcp"
+transport = "stdio"
+namespace = "openbb"
+runtime_ref = "finance/openbb"
+args = ["--transport", "stdio", "--tool-discovery"]
+env = { OPENBB_MCP_ENABLE_CLI_TOOLS = "false" }
+timeout_seconds = 150
+statefulness = "request_scoped"
+deny_tools = ["install_skill"]
+
+[services.notion]
+enabled = false
+kind = "mcp"
+transport = "stdio"
+namespace = "notion"
+command = "npx"
+args = ["-y", "mcp-remote", "https://mcp.notion.com/mcp"]
+timeout_seconds = 150
+statefulness = "request_scoped"
+auth_ref = "mcp-remote-store:default"
+executor_deny_patterns = ["create", "update", "delete", "move", "duplicate", "restore", "append", "insert", "replace", "archive", "upload", "comment", "reaction", "resolved", "apply_template"]
+
+[services.qveris]
+enabled = false
+kind = "mcp"
+transport = "streamable-http"
+namespace = "qveris"
+url = "https://mcp.qveris.ai/mcp"
+credential_ref = "keychain:finance/qveris"
+timeout_seconds = 150
+statefulness = "request_scoped"

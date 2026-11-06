@@ -1,0 +1,39 @@
+# Caller roles for finance-hub.
+#
+# Identity comes from the per-client adapter (FINANCE_AGENT env -> bridge
+# header). A local loopback hub is not an OS security boundary; roles prevent
+# accidental overwrites and keep publication in the memory-manager flow.
+# Unknown callers get the least privilege: read + propose.
+schema_version = 1
+
+[default]
+role = "executor"
+can_publish = false
+can_read_restricted = false
+
+[agents.codex]
+display = "Codex"
+role = "manager"
+can_publish = true
+can_read_restricted = true
+notes = "Memory manager and shared-library maintainer per AGENTS.md."
+
+[agents.deepseek-harness]
+display = "DeepSeek Harness"
+role = "executor"
+can_publish = false
+can_read_restricted = false
+notes = "Execution agent. Publishes nothing directly; submits candidates."
+
+[agents.opencode]
+display = "opencode"
+role = "executor"
+can_publish = false
+can_read_restricted = false
+
+[agents.finance-admin]
+display = "finance-admin (local maintenance CLI)"
+role = "manager"
+can_publish = true
+can_read_restricted = true
+notes = "Used by tools/memory_admin.py for explicitly authorized maintenance."

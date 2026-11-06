@@ -1,0 +1,6 @@
+schema_version = 1
+
+[shared.via_hub]
+openbb = { namespace = "openbb", service = "openbb" }
+notion = { namespace = "notion", service = "notion" }
+qveris = { namespace = "qveris", service = "qveris" }

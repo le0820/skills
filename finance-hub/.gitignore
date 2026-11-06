@@ -1,0 +1,9 @@
+.venv/
+.runtime/
+memory/
+MEMORY.md
+__pycache__/
+*.py[cod]
+runs/
+.env
+.env.*

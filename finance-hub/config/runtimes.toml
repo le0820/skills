@@ -1,0 +1,6 @@
+schema_version = 1
+
+[runtimes."finance/openbb"]
+path = "/replace/with/absolute/path/to/openbb-mcp"
+owner = "local"
+environment = "external"

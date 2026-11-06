@@ -1,0 +1,33 @@
+click==8.5.0
+easy-tdx @ git+https://github.com/clong365/easy_tdx.git@4820b4a0496899ece0b8ca4d7f4d66a5159da7f8
+numpy==2.5.4
+pandas==3.1.0
+python-dateutil==3.0.0
+six==1.17.0
+tzdata==2026.5
+# --- finance-hub runtime (MCP SDK 1.30.0 + loopback HTTP + config validation) ---
+mcp==1.30.0
+uvicorn==0.54.0
+PyYAML==6.0.3
+httpx==0.28.1
+annotated-types==0.8.0
+anyio==4.15.1
+attrs==26.1.0
+certifi==2026.10.23
+h11==0.16.0
+httpcore==1.0.9
+httpx-sse==0.4.3
+idna==3.20
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+pydantic==2.14.1
+pydantic-core==2.50.1
+pydantic-settings==2.16.1
+python-dotenv==1.2.4
+python-multipart==0.0.32
+referencing==0.37.0
+rpds-py==2026.9.1
+sse-starlette==3.5.1
+starlette==1.9.0
+typing-extensions==4.16.0
+typing-inspection==0.4.4
